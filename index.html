@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClinicApp | Podología y Cosmetología</title>
+  <meta name="description" content="ClinicApp es el sistema de fichas clínicas exclusivo para estudiantes y profesionales de Podología y Cosmetología de Instituto Profesional AIEP.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header / Nav -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#top" class="logo">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        ClinicApp
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#servicios" class="nav__link">Servicios</a>
+        <a href="#beneficios" class="nav__link">Beneficios</a>
+        <a href="#contacto" class="nav__link">Contacto</a>
+      </nav>
+
+      <div class="header__actions">
+        <button class="btn btn--ghost" id="openLoginBtn">Iniciar sesión</button>
+        <button class="btn btn--primary" id="openRegisterBtn">Crear cuenta</button>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#servicios">Servicios</a>
+    <a href="#beneficios">Beneficios</a>
+    <a href="#contacto">Contacto</a>
+    <button class="btn btn--ghost" id="openLoginBtnMobile">Iniciar sesión</button>
+    <button class="btn btn--primary" id="openRegisterBtnMobile">Crear cuenta</button>
+  </div>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <span class="badge">Plataforma exclusiva · Estudiantes y profesionales de Instituto Profesional AIEP</span>
+          <h1>El registro y seguimiento de pacientes de tu especialidad, en formato digital</h1>
+          <p class="hero__subtitle">
+            Crea fichas clínicas completas, registra la evolución de cada tratamiento y lleva el seguimiento
+            de tus pacientes desde la formación hasta la práctica profesional. Disponible solo para
+            estudiantes y profesionales de Podología y Cosmetología de Instituto Profesional AIEP.
+          </p>
+          <div class="hero__cta">
+            <button class="btn btn--primary btn--lg" id="openRegisterBtnHero">Crear mi cuenta</button>
+            <a href="#servicios" class="btn btn--outline btn--lg">Ver funcionalidades</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Elegibilidad institucional -->
+    <section class="eligibility">
+      <div class="container">
+        <p class="eligibility__label">Acceso restringido a la comunidad de Instituto Profesional AIEP</p>
+        <div class="eligibility__grid reveal-group">
+          <div class="eligibility__item reveal">
+            <span class="eligibility__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg></span>
+            <div>
+              <strong>Estudiantes matriculados</strong>
+              <span>Carreras de Podología y Cosmetología</span>
+            </div>
+          </div>
+          <div class="eligibility__item reveal">
+            <span class="eligibility__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 13.5 7 22l5-3 5 3-2-8.5"/></svg></span>
+            <div>
+              <strong>Profesionales</strong>
+              <span>Egresados de Instituto Profesional AIEP</span>
+            </div>
+          </div>
+          <div class="eligibility__item reveal">
+            <span class="eligibility__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <div>
+              <strong>Verificación institucional</strong>
+              <span>Registro con correo @correoaiep.cl</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Servicios / especialidades -->
+    <section class="services" id="servicios">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Especialidades</span>
+          <h2>Una plataforma, dos especialidades</h2>
+          <p>Herramientas específicas para el registro clínico de estudiantes y profesionales de podología y cosmetología.</p>
+        </div>
+
+        <div class="services__grid reveal-group">
+          <div class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><ellipse cx="8" cy="16" rx="3.2" ry="5" transform="rotate(-15 8 16)"/><ellipse cx="16" cy="8" rx="3.2" ry="5" transform="rotate(15 16 8)"/></svg></div>
+            <h3>Podología</h3>
+            <ul>
+              <li>Fichas de valoración biomecánica</li>
+              <li>Registro fotográfico de evolución</li>
+              <li>Control de tratamientos de uñas y plantillas</li>
+              <li>Seguimiento de pacientes diabéticos</li>
+            </ul>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2c.4 3.2 1 4.8 2.2 6C15.4 9.2 17 9.8 20 10.2c-3 .4-4.6 1-5.8 2.2C13 13.6 12.4 15.2 12 18.4c-.4-3.2-1-4.8-2.2-6C8.6 11.2 7 10.6 4 10.2c3-.4 4.6-1 5.8-2.2C11 6.8 11.6 5.2 12 2Z"/></svg></div>
+            <h3>Cosmetología</h3>
+            <ul>
+              <li>Fichas de anamnesis y tipo de piel</li>
+              <li>Protocolos de tratamientos estéticos</li>
+              <li>Antes/después con galería de imágenes</li>
+              <li>Registro de sesiones por paciente</li>
+            </ul>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+            <h3>Seguimiento clínico</h3>
+            <ul>
+              <li>Evolución del paciente a lo largo del tratamiento</li>
+              <li>Comparación entre sesiones</li>
+              <li>Observaciones y notas clínicas por visita</li>
+              <li>Historial completo siempre disponible</li>
+            </ul>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+            <h3>Seguridad clínica</h3>
+            <ul>
+              <li>Datos encriptados y respaldados</li>
+              <li>Control de acceso por usuario</li>
+              <li>Historial de cambios en cada ficha</li>
+              <li>Cumplimiento de normativa de datos de salud</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section class="benefits" id="beneficios">
+      <div class="container benefits__inner">
+        <div class="benefits__visual reveal-group">
+          <div class="stat-card reveal">
+            <span class="stat-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg></span>
+            <span class="stat-card__label">Historial clínico centralizado, sin planillas sueltas</span>
+          </div>
+          <div class="stat-card stat-card--alt reveal">
+            <span class="stat-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h11a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.3 8.05 4.5 4.5 0 0 0 7 18Z"/></svg></span>
+            <span class="stat-card__label">Acceso en la nube desde cualquier dispositivo</span>
+          </div>
+          <div class="stat-card reveal">
+            <span class="stat-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 11h6M9 15h6"/></svg></span>
+            <span class="stat-card__label">Plantillas adaptadas a tu especialidad</span>
+          </div>
+        </div>
+
+        <div class="benefits__content reveal-group">
+          <span class="eyebrow">Beneficios</span>
+          <h2>Menos papeleo, más tiempo para tus pacientes</h2>
+          <div class="benefit-item reveal">
+            <h4>Todo en un mismo lugar</h4>
+            <p>Historial clínico y seguimiento de pacientes centralizados, sin planillas sueltas ni carpetas físicas.</p>
+          </div>
+          <div class="benefit-item reveal">
+            <h4>Acceso desde cualquier lugar</h4>
+            <p>Ingresa desde la universidad, tu casa o tu centro de prácticas. Toda tu información sincronizada en la nube.</p>
+          </div>
+          <div class="benefit-item reveal">
+            <h4>Pensado para tu especialidad</h4>
+            <p>Plantillas de ficha adaptadas a podología y cosmetología, útiles tanto en la formación como en la práctica profesional.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="contact" id="contacto">
+      <div class="container contact__inner">
+        <div class="section-head reveal" style="text-align:left; margin-bottom: 24px;">
+          <span class="eyebrow">Contacto</span>
+          <h2>¿Tienes dudas? Conversemos</h2>
+          <p>Escríbenos si eres estudiante o profesional de Instituto Profesional AIEP y tienes problemas para acceder a tu cuenta.</p>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">Nombre</label>
+              <input type="text" id="contactName" name="name" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Correo institucional</label>
+              <input type="email" id="contactEmail" name="email" placeholder="tucorreo@correoaiep.cl" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contactMessage">Mensaje</label>
+            <textarea id="contactMessage" name="message" rows="4" placeholder="Cuéntanos en qué podemos ayudarte..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Enviar mensaje</button>
+          <p class="form-success" id="contactSuccess" hidden>¡Gracias! Te contactaremos pronto.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#top" class="logo logo--footer">
+          <span class="logo__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          ClinicApp
+        </a>
+        <p>Sistema de fichas clínicas exclusivo para estudiantes y profesionales de Podología y Cosmetología de Instituto Profesional AIEP.</p>
+      </div>
+
+      <div class="footer__col">
+        <h5>Producto</h5>
+        <a href="#servicios">Servicios</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#" id="openRegisterBtnFooter">Crear cuenta</a>
+      </div>
+
+      <div class="footer__col">
+        <h5>Empresa</h5>
+        <a href="#contacto">Contacto</a>
+      </div>
+
+      <div class="footer__col">
+        <h5>Legal</h5>
+        <a href="#">Términos y condiciones</a>
+        <a href="#">Política de privacidad</a>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <p>&copy; 2026 ClinicApp. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <button class="modal__close" id="closeLoginBtn" aria-label="Cerrar">&times;</button>
+
+      <div class="modal__tabs">
+        <button class="modal__tab modal__tab--active" data-tab="login" id="tabLogin">Iniciar sesión</button>
+        <button class="modal__tab" data-tab="register" id="tabRegister">Crear cuenta</button>
+      </div>
+
+      <!-- Login form -->
+      <form class="auth-form" id="loginForm">
+        <h3 id="loginTitle">Bienvenido de nuevo</h3>
+        <p class="auth-form__subtitle">Ingresa con tu correo institucional de Instituto Profesional AIEP</p>
+
+        <div class="form-group">
+          <label for="loginEmail">Correo institucional</label>
+          <input type="email" id="loginEmail" name="email" placeholder="tucorreo@correoaiep.cl" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <div class="password-field">
+            <input type="password" id="loginPassword" name="password" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="password-toggle" data-target="loginPassword" aria-label="Mostrar contraseña"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+
+        <div class="form-row form-row--between">
+          <label class="checkbox">
+            <input type="checkbox" name="remember">
+            <span>Recordarme</span>
+          </label>
+          <a href="#" class="link-small">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--block">Iniciar sesión</button>
+        <p class="auth-form__error" id="loginError" hidden>Correo o contraseña incorrectos.</p>
+      </form>
+
+      <!-- Register form -->
+      <form class="auth-form" id="registerForm" hidden>
+        <h3>Crea tu cuenta</h3>
+        <p class="auth-form__subtitle">Exclusivo para estudiantes y profesionales de Instituto Profesional AIEP</p>
+
+        <div class="form-group">
+          <label for="registerName">Nombre completo</label>
+          <input type="text" id="registerName" name="name" placeholder="Tu nombre" required>
+        </div>
+
+        <fieldset class="field-group">
+          <legend>Tu perfil académico</legend>
+          <div class="form-group">
+            <label for="registerRole">Perfil</label>
+            <select id="registerRole" name="role" required>
+              <option value="" disabled selected>Selecciona tu perfil</option>
+              <option value="estudiante">Estudiante</option>
+              <option value="profesional">Profesional</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="registerSpecialty">Especialidad</label>
+            <select id="registerSpecialty" name="specialty" required>
+              <option value="" disabled selected>Selecciona tu especialidad</option>
+              <option value="podologia">Podología</option>
+              <option value="cosmetologia">Cosmetología</option>
+              <option value="ambas">Ambas</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <div class="form-group">
+          <label for="registerEmail">Correo institucional</label>
+          <input type="email" id="registerEmail" name="email" placeholder="tucorreo@correoaiep.cl" required autocomplete="username">
+          <span class="form-hint">Debes registrarte con tu correo @correoaiep.cl</span>
+        </div>
+
+        <div class="form-group">
+          <label for="registerPassword">Contraseña</label>
+          <div class="password-field">
+            <input type="password" id="registerPassword" name="password" placeholder="Mínimo 8 caracteres" minlength="8" required autocomplete="new-password">
+            <button type="button" class="password-toggle" data-target="registerPassword" aria-label="Mostrar contraseña"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--block">Crear cuenta</button>
+        <p class="auth-form__error" id="registerError" hidden>Debes registrarte con tu correo institucional @correoaiep.cl</p>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
