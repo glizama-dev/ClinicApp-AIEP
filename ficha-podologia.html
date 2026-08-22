@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha Clínica Podológica | ClinicApp</title>
+  <meta name="description" content="Ficha clínica podológica digital de ClinicApp: consentimiento informado, antecedentes, anamnesis, evaluación física y tratamiento.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ficha.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="ficha-header">
+    <div class="container ficha-header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        ClinicApp
+      </a>
+      <div class="ficha-header__title">
+        <span class="eyebrow">Podología</span>
+        <h1>Ficha Clínica Podológica</h1>
+      </div>
+      <div class="ficha-header__actions">
+        <button type="button" class="btn btn--outline" id="printFichaBtn">Imprimir</button>
+        <a href="index.html" class="btn btn--ghost">Volver</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="ficha-layout container">
+    <!-- Sidebar de navegación -->
+    <nav class="ficha-sidebar" id="fichaSidebar" aria-label="Secciones de la ficha">
+      <ul class="ficha-sidebar__list">
+        <li><a href="#consentimiento" class="ficha-sidebar__link">Consentimiento informado</a></li>
+        <li><a href="#antecedentes" class="ficha-sidebar__link">1. Antecedentes personales</a></li>
+        <li><a href="#anamnesis-proxima" class="ficha-sidebar__link">2. Anamnesis próxima</a></li>
+        <li><a href="#anamnesis-remota" class="ficha-sidebar__link">3. Anamnesis remota</a></li>
+        <li><a href="#signos-vitales" class="ficha-sidebar__link">4. Signos vitales y antropometría</a></li>
+        <li><a href="#evaluacion-fisica" class="ficha-sidebar__link">5. Evaluación física EEII</a></li>
+        <li><a href="#lesiones-ungueales" class="ficha-sidebar__link">6. Lesiones ungueales</a></li>
+        <li><a href="#diagramas" class="ficha-sidebar__link">7. Diagramas y topografía</a></li>
+        <li><a href="#tratamiento" class="ficha-sidebar__link">8. Tratamiento e indicaciones</a></li>
+      </ul>
+    </nav>
+
+    <!-- Contenido -->
+    <main class="ficha-content">
+      <form id="fichaPodologiaForm" novalidate>
+
+        <!-- 0. Consentimiento informado -->
+        <section class="ficha-section" id="consentimiento">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Antes de la atención</span>
+            <h2>Consentimiento informado para atención podológica</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table class="plain-table">
+              <tbody>
+                <tr><th>Fecha</th><td><input type="date" name="consentFecha"></td></tr>
+                <tr><th>Lugar de la actividad</th><td><input type="text" name="consentLugar" placeholder="Ej. Clínica podológica AIEP"></td></tr>
+                <tr><th>Docente a cargo de la actividad</th><td><input type="text" name="consentDocente" placeholder="Nombre del/la docente"></td></tr>
+                <tr><th>Estudiante que realiza la atención</th><td><input type="text" name="consentEstudiante" placeholder="Nombre del/la estudiante"></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="consent-text">
+            <p>Estimado/a usuario/a, antes de iniciar la atención Podológica, lea atentamente la siguiente información sobre el propósito, las condiciones y la finalidad de este procedimiento.</p>
+            <ol>
+              <li>La atención será realizada por estudiantes de la carrera Técnico en Podología Clínica, bajo supervisión directa de un/a docente profesional calificado/a. Esta actividad tiene fines formativos, educativos y comunitarios, en el marco de una jornada sin fines de lucro organizada por una institución de educación superior.</li>
+              <li>Durante la atención se realizará una evaluación podológica orientada al cuidado del pie de manera integral, junto con orientación sobre prevención de complicaciones y signos de alerta. Si se identifica alguna condición que requiera derivación, se informará y orientará adecuadamente.</li>
+              <li>No se realizarán procedimientos invasivos ni intervenciones sin autorización. La persona atendida podrá rechazar o suspender la atención en cualquier momento, sin consecuencias.</li>
+              <li>La información entregada será tratada con confidencialidad y registrada en una ficha interna solo con fines académicos, resguardando los datos personales.</li>
+            </ol>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="consentNombre">Yo (nombre completo del paciente)</label>
+              <input type="text" id="consentNombre" name="consentNombre" placeholder="Nombre completo">
+            </div>
+            <div class="form-group">
+              <label for="consentRut">Rut</label>
+              <input type="text" id="consentRut" name="consentRut" placeholder="12.345.678-9">
+            </div>
+          </div>
+
+          <div class="consent-text">
+            <p>Declaro haber leído y comprendido la información anterior sobre el propósito y alcance de la actividad podológica. En virtud de ello, manifiesto libre y voluntariamente mi decisión:</p>
+          </div>
+
+          <div class="yn-options" role="radiogroup" aria-label="Decisión de participación">
+            <label class="radio-pill"><input type="radio" name="consentDecision" value="acepto"><span>Acepto participar en la atención podológica descrita</span></label>
+            <label class="radio-pill"><input type="radio" name="consentDecision" value="rechazo"><span>Rechazo participar en la atención podológica descrita</span></label>
+          </div>
+
+          <div class="signature-grid">
+            <div class="signature-card">
+              <span class="signature-card__label">Firma Paciente</span>
+              <div class="signature-card__canvas-wrap">
+                <canvas class="signature-pad" data-signature="paciente" width="320" height="160"></canvas>
+              </div>
+              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="paciente">Limpiar firma</button>
+            </div>
+            <div class="signature-card">
+              <span class="signature-card__label">Firma Docente</span>
+              <div class="signature-card__canvas-wrap">
+                <canvas class="signature-pad" data-signature="docente" width="320" height="160"></canvas>
+              </div>
+              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="docente">Limpiar firma</button>
+            </div>
+            <div class="signature-card">
+              <span class="signature-card__label">Firma Estudiante</span>
+              <div class="signature-card__canvas-wrap">
+                <canvas class="signature-pad" data-signature="estudiante" width="320" height="160"></canvas>
+              </div>
+              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="estudiante">Limpiar firma</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1. Antecedentes personales -->
+        <section class="ficha-section" id="antecedentes">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 1</span>
+            <h2>Antecedentes personales</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="antFecha">Fecha</label>
+              <input type="date" id="antFecha" name="antFecha">
+            </div>
+            <div class="form-group">
+              <label for="antNombre">Nombre</label>
+              <input type="text" id="antNombre" name="antNombre" placeholder="Nombre completo">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="antRut">Rut</label>
+              <input type="text" id="antRut" name="antRut" placeholder="12.345.678-9">
+            </div>
+            <div class="form-group">
+              <label for="antTelefono">Teléfono</label>
+              <div class="input-prefix">
+                <span>+56</span>
+                <input type="tel" id="antTelefono" name="antTelefono" placeholder="9 1234 5678">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="antEdad">Edad</label>
+              <input type="number" id="antEdad" name="antEdad" min="0" max="120">
+            </div>
+            <div class="form-group">
+              <label for="antNacimiento">Fecha de nacimiento</label>
+              <input type="date" id="antNacimiento" name="antNacimiento">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="antEstadoCivil">Estado civil</label>
+              <input type="text" id="antEstadoCivil" name="antEstadoCivil" placeholder="Ej. Soltero/a">
+            </div>
+            <div class="form-group">
+              <label for="antPrevision">Previsión</label>
+              <input type="text" id="antPrevision" name="antPrevision" placeholder="Ej. Fonasa, Isapre">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="antDireccion">Dirección</label>
+              <input type="text" id="antDireccion" name="antDireccion">
+            </div>
+            <div class="form-group">
+              <label for="antOcupacion">Ocupación</label>
+              <input type="text" id="antOcupacion" name="antOcupacion">
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Anamnesis próxima -->
+        <section class="ficha-section" id="anamnesis-proxima">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 2</span>
+            <h2>Anamnesis próxima</h2>
+          </div>
+          <div class="form-group">
+            <label for="anamnesisProxima">Motivo de consulta y antecedentes de la afección actual</label>
+            <textarea id="anamnesisProxima" name="anamnesisProxima" rows="5" placeholder="Describa el motivo de consulta..."></textarea>
+          </div>
+        </section>
+
+        <!-- 3. Anamnesis remota -->
+        <section class="ficha-section" id="anamnesis-remota">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 3</span>
+            <h2>Anamnesis remota</h2>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Farmacología</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="farmacologia" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="farmacologia" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="farmacologiaDetalle" placeholder="Detalle">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Enfermedades crónicas</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="enfCronicas" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="enfCronicas" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="enfCronicasDetalle" placeholder="Detalle">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Enfermedades respiratorias</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="enfRespiratorias" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="enfRespiratorias" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="enfRespiratoriasDetalle" placeholder="Detalle">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Diabetes</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="diabetes" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="diabetes" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="diabetesTipo" placeholder="Tipo">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Enfermedades neurológicas</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="enfNeurologicas" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="enfNeurologicas" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="enfNeurologicasDetalle" placeholder="Detalle">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Antecedentes familiares</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="antFamiliares" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="antFamiliares" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="antFamiliaresDetalle" placeholder="Detalle">
+          </div>
+
+          <div class="habits-row">
+            <span class="yn-row__label">Hábitos</span>
+            <div class="habits-row__fields">
+              <div class="form-group"><label for="habitoTabaco">Tabaco</label><input type="text" id="habitoTabaco" name="habitoTabaco"></div>
+              <div class="form-group"><label for="habitoDrogas">Drogas</label><input type="text" id="habitoDrogas" name="habitoDrogas"></div>
+              <div class="form-group"><label for="habitoAlcohol">Alcohol</label><input type="text" id="habitoAlcohol" name="habitoAlcohol"></div>
+              <div class="form-group"><label for="habitoOtros">Otros</label><input type="text" id="habitoOtros" name="habitoOtros"></div>
+            </div>
+          </div>
+
+          <div class="yn-row yn-row--textarea">
+            <span class="yn-row__label">Alteraciones ortopédicas (especifique)</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="alterOrtopedicas" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="alterOrtopedicas" value="no"><span>No</span></label>
+            </div>
+            <textarea class="yn-detail" name="alterOrtopedicasDetalle" rows="2" placeholder="Especifique"></textarea>
+          </div>
+
+          <div class="yn-row yn-row--textarea">
+            <span class="yn-row__label">Alteraciones circulatorias (especifique)</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="alterCirculatorias" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="alterCirculatorias" value="no"><span>No</span></label>
+            </div>
+            <textarea class="yn-detail" name="alterCirculatoriasDetalle" rows="2" placeholder="Especifique"></textarea>
+          </div>
+
+          <div class="yn-row yn-row--textarea">
+            <span class="yn-row__label">Úlceras / heridas (especifique)</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="ulcerasHeridas" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="ulcerasHeridas" value="no"><span>No</span></label>
+            </div>
+            <textarea class="yn-detail" name="ulcerasHeridasDetalle" rows="2" placeholder="Especifique"></textarea>
+          </div>
+
+          <div class="yn-row yn-row--textarea">
+            <span class="yn-row__label">Alergia (especifique) medicamento - metal - látex - otros</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="alergia" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="alergia" value="no"><span>No</span></label>
+            </div>
+            <textarea class="yn-detail" name="alergiaDetalle" rows="2" placeholder="Especifique"></textarea>
+          </div>
+        </section>
+
+        <!-- 4. Signos vitales -->
+        <section class="ficha-section" id="signos-vitales">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 4</span>
+            <h2>Control de signos vitales, antropometría e interpretación</h2>
+          </div>
+
+          <div class="vitals-grid">
+            <div class="form-group"><label for="vitalPA">P/A (presión arterial)</label><input type="text" id="vitalPA" name="vitalPA" placeholder="120/80 mmHg"></div>
+            <div class="form-group"><label for="vitalTemp">T° (temperatura)</label><input type="text" id="vitalTemp" name="vitalTemp" placeholder="36.5 °C"></div>
+            <div class="form-group"><label for="vitalFC">FC (frecuencia cardíaca)</label><input type="text" id="vitalFC" name="vitalFC" placeholder="lpm"></div>
+            <div class="form-group"><label for="vitalHGT">HGT (hemoglucotest)</label><input type="text" id="vitalHGT" name="vitalHGT" placeholder="mg/dL"></div>
+            <div class="form-group"><label for="vitalFR">FR (frecuencia respiratoria)</label><input type="text" id="vitalFR" name="vitalFR" placeholder="rpm"></div>
+            <div class="form-group"><label for="vitalSatO2">SatO2% (saturación)</label><input type="text" id="vitalSatO2" name="vitalSatO2" placeholder="%"></div>
+            <div class="form-group"><label for="vitalPeso">Peso (kg)</label><input type="number" id="vitalPeso" name="vitalPeso" step="0.1" min="0"></div>
+            <div class="form-group"><label for="vitalTalla">Talla (cm)</label><input type="number" id="vitalTalla" name="vitalTalla" step="0.1" min="0"></div>
+            <div class="form-group"><label for="vitalIMC">Índice de masa corporal (IMC)</label><input type="text" id="vitalIMC" name="vitalIMC" placeholder="Se calcula automáticamente"></div>
+          </div>
+        </section>
+
+        <!-- 5. Evaluación física visual y táctil de extremidades inferiores -->
+        <section class="ficha-section" id="evaluacion-fisica">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 5</span>
+            <h2>Evaluación física visual y táctil de extremidades inferiores</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table class="eval-table">
+              <thead>
+                <tr><th>Evaluación</th><th>Pie derecho</th><th>Pie izquierdo</th><th>Observaciones</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Temperatura de la extremidad</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="tempExtremidadDer" value="conservada"><span>Conservada</span></label>
+                    <label class="radio-pill"><input type="radio" name="tempExtremidadDer" value="fria"><span>Fría</span></label>
+                    <label class="radio-pill"><input type="radio" name="tempExtremidadDer" value="aumentada"><span>Aumentada</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="tempExtremidadIzq" value="conservada"><span>Conservada</span></label>
+                    <label class="radio-pill"><input type="radio" name="tempExtremidadIzq" value="fria"><span>Fría</span></label>
+                    <label class="radio-pill"><input type="radio" name="tempExtremidadIzq" value="aumentada"><span>Aumentada</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsTempExtremidad"></td>
+                </tr>
+                <tr>
+                  <th>Pulso pedio</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="pulsoPedioDer" value="presente"><span>Presente</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoPedioDer" value="disminuido"><span>Disminuido</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoPedioDer" value="ausente"><span>Ausente</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="pulsoPedioIzq" value="presente"><span>Presente</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoPedioIzq" value="disminuido"><span>Disminuido</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoPedioIzq" value="ausente"><span>Ausente</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsPulsoPedio"></td>
+                </tr>
+                <tr>
+                  <th>Pulso tibial posterior</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="pulsoTibialDer" value="presente"><span>Presente</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoTibialDer" value="disminuido"><span>Disminuido</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoTibialDer" value="ausente"><span>Ausente</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="pulsoTibialIzq" value="presente"><span>Presente</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoTibialIzq" value="disminuido"><span>Disminuido</span></label>
+                    <label class="radio-pill"><input type="radio" name="pulsoTibialIzq" value="ausente"><span>Ausente</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsPulsoTibial"></td>
+                </tr>
+                <tr>
+                  <th>Tipo y condición de piel</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="condicionPielDer" value="hidratada"><span>Hidratada</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielDer" value="seca"><span>Seca</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielDer" value="descamativa"><span>Descamativa</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielDer" value="fisurada"><span>Fisurada</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielDer" value="macerada"><span>Macerada</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="condicionPielIzq" value="hidratada"><span>Hidratada</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielIzq" value="seca"><span>Seca</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielIzq" value="descamativa"><span>Descamativa</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielIzq" value="fisurada"><span>Fisurada</span></label>
+                    <label class="radio-pill"><input type="radio" name="condicionPielIzq" value="macerada"><span>Macerada</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsCondicionPiel"></td>
+                </tr>
+                <tr>
+                  <th>Coloración de la piel</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="coloracionPielDer" value="normal"><span>Normal</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielDer" value="palida"><span>Pálida</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielDer" value="eritematosa"><span>Eritematosa</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielDer" value="cianotica"><span>Cianótica</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielDer" value="hiperpigmentada"><span>Hiperpigmentada</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="coloracionPielIzq" value="normal"><span>Normal</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielIzq" value="palida"><span>Pálida</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielIzq" value="eritematosa"><span>Eritematosa</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielIzq" value="cianotica"><span>Cianótica</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionPielIzq" value="hiperpigmentada"><span>Hiperpigmentada</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsColoracionPiel"></td>
+                </tr>
+                <tr>
+                  <th>Nevos o cambios pigmentarios</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="nevosDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="nevosDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="nevosIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="nevosIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsNevos"></td>
+                </tr>
+                <tr>
+                  <th>Heridas o úlceras</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="heridasUlcerasDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="heridasUlcerasDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="heridasUlcerasIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="heridasUlcerasIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsHeridasUlceras"></td>
+                </tr>
+                <tr>
+                  <th>Lesiones de carácter vascular</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="lesionesVascularesDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="lesionesVascularesDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="lesionesVascularesIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="lesionesVascularesIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsLesionesVasculares"></td>
+                </tr>
+                <tr>
+                  <th>Dolor a la palpación</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="dolorPalpacionDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="dolorPalpacionDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="dolorPalpacionIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="dolorPalpacionIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsDolorPalpacion"></td>
+                </tr>
+                <tr>
+                  <th>Orientación o derivación sugerida</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="derivacionDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="derivacionDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="derivacionIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="derivacionIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsDerivacion"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 6. Evaluación de lesiones ungueales -->
+        <section class="ficha-section" id="lesiones-ungueales">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 6</span>
+            <h2>Evaluación de lesiones ungueales</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table class="eval-table">
+              <thead>
+                <tr><th>Evaluación</th><th>Pie derecho</th><th>Pie izquierdo</th><th>Observaciones</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Uñas comprometidas</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasDer" value="1"><span>1°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasDer" value="2"><span>2°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasDer" value="3"><span>3°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasDer" value="4"><span>4°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasDer" value="5"><span>5°</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasIzq" value="1"><span>1°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasIzq" value="2"><span>2°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasIzq" value="3"><span>3°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasIzq" value="4"><span>4°</span></label>
+                    <label class="radio-pill"><input type="checkbox" name="unasComprometidasIzq" value="5"><span>5°</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsUnasComprometidas"></td>
+                </tr>
+                <tr>
+                  <th>Coloración ungueal</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="coloracionUngDer" value="normal"><span>Normal</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngDer" value="amarillenta"><span>Amarillenta</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngDer" value="blanquecina"><span>Blanquecina</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngDer" value="oscura"><span>Oscura</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngDer" value="verdosa"><span>Verdosa</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="coloracionUngIzq" value="normal"><span>Normal</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngIzq" value="amarillenta"><span>Amarillenta</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngIzq" value="blanquecina"><span>Blanquecina</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngIzq" value="oscura"><span>Oscura</span></label>
+                    <label class="radio-pill"><input type="radio" name="coloracionUngIzq" value="verdosa"><span>Verdosa</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsColoracionUng"></td>
+                </tr>
+                <tr>
+                  <th>Grosor / forma ungueal</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="grosorUngDer" value="normal"><span>Normal</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngDer" value="engrosada"><span>Engrosada</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngDer" value="adelgazada"><span>Adelgazada</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngDer" value="curva"><span>Curva</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngDer" value="involuta"><span>Involuta</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngDer" value="deformada"><span>Deformada</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="grosorUngIzq" value="normal"><span>Normal</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngIzq" value="engrosada"><span>Engrosada</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngIzq" value="adelgazada"><span>Adelgazada</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngIzq" value="curva"><span>Curva</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngIzq" value="involuta"><span>Involuta</span></label>
+                    <label class="radio-pill"><input type="radio" name="grosorUngIzq" value="deformada"><span>Deformada</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsGrosorUng"></td>
+                </tr>
+                <tr>
+                  <th>Onicocriptosis</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicocriptosisDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicocriptosisDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicocriptosisIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicocriptosisIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsOnicocriptosis"></td>
+                </tr>
+                <tr>
+                  <th>Onicomicosis aparente</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicomicosisDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicomicosisDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicomicosisIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicomicosisIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsOnicomicosis"></td>
+                </tr>
+                <tr>
+                  <th>Onicogrifosis / hipertrofia</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicogrifosisDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicogrifosisDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicogrifosisIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicogrifosisIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsOnicogrifosis"></td>
+                </tr>
+                <tr>
+                  <th>Onicolisis / desprendimiento</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicolisisDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicolisisDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="onicolisisIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="onicolisisIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsOnicolisis"></td>
+                </tr>
+                <tr>
+                  <th>Dolor o signos inflamatorios periungueales</th>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="dolorPeriungDer" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="dolorPeriungDer" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><div class="foot-options">
+                    <label class="radio-pill"><input type="radio" name="dolorPeriungIzq" value="no"><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="dolorPeriungIzq" value="si"><span>Sí</span></label>
+                  </div></td>
+                  <td><input type="text" name="obsDolorPeriung"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 7. Diagramas y topografía -->
+        <section class="ficha-section" id="diagramas">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 7</span>
+            <h2>Diagramas y topografía</h2>
+          </div>
+
+          <figure class="diagram-figure diagram-figure--wide">
+            <img class="diagram-figure__img" src="img/1-simbologia-podologica.png" alt="Simbología podológica: vistas dorsal y plantar del pie izquierdo y derecho">
+          </figure>
+          <div class="form-group">
+            <label for="simbologiaObs">Observaciones / simbología utilizada</label>
+            <textarea id="simbologiaObs" name="simbologiaObs" rows="3" placeholder="Describa hallazgos y su ubicación en cada diagrama..."></textarea>
+          </div>
+
+          <h3 class="ficha-subhead">Semmes-Weinstein (SWME) monofilamento</h3>
+          <div class="swme-layout">
+            <figure class="diagram-figure diagram-figure--sm">
+              <img class="diagram-figure__img" src="img/2-swme.png" alt="Puntos de evaluación con monofilamento Semmes-Weinstein, del 1 al 10">
+            </figure>
+            <div class="table-wrap swme-table-wrap">
+              <table class="eval-table swme-table">
+                <thead><tr><th>Punto</th><th>Sensibilidad</th></tr></thead>
+                <tbody id="swmeTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <h3 class="ficha-subhead">Topografía ungueal</h3>
+          <div class="topo-layout">
+            <figure class="diagram-figure diagram-figure--sm">
+              <img class="diagram-figure__img" src="img/3-topografia-ungueal.png" alt="Topografía ungueal: zonas 1 a 9 por uña, pie derecho e izquierdo">
+            </figure>
+            <div class="table-wrap topo-table-wrap">
+              <table class="eval-table topo-table">
+                <thead><tr><th>Dedo</th><th>D.D.</th><th>D.I.</th></tr></thead>
+                <tbody>
+                  <tr><th>1°</th><td><input type="text" name="topoDD1"></td><td><input type="text" name="topoDI1"></td></tr>
+                  <tr><th>2°</th><td><input type="text" name="topoDD2"></td><td><input type="text" name="topoDI2"></td></tr>
+                  <tr><th>3°</th><td><input type="text" name="topoDD3"></td><td><input type="text" name="topoDI3"></td></tr>
+                  <tr><th>4°</th><td><input type="text" name="topoDD4"></td><td><input type="text" name="topoDI4"></td></tr>
+                  <tr><th>5°</th><td><input type="text" name="topoDD5"></td><td><input type="text" name="topoDI5"></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <figure class="diagram-figure diagram-figure--wide">
+            <img class="diagram-figure__img" src="img/4-morfologia-antepie.png" alt="Morfología del antepié: tipo egipcio, cuadrado y griego">
+          </figure>
+          <div class="yn-options">
+            <label class="radio-pill"><input type="radio" name="morfologiaAntepie" value="egipcio"><span>Egipcio</span></label>
+            <label class="radio-pill"><input type="radio" name="morfologiaAntepie" value="cuadrado"><span>Cuadrado</span></label>
+            <label class="radio-pill"><input type="radio" name="morfologiaAntepie" value="griego"><span>Griego</span></label>
+          </div>
+        </section>
+
+        <!-- 8. Tratamiento e indicaciones -->
+        <section class="ficha-section" id="tratamiento">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 8</span>
+            <h2>Tratamiento podológico e indicaciones</h2>
+          </div>
+          <div class="form-group">
+            <label for="tratamientoTexto">Tratamiento realizado e indicaciones</label>
+            <textarea id="tratamientoTexto" name="tratamientoTexto" rows="6" placeholder="Describa el tratamiento realizado y las indicaciones entregadas..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="podologoTratante">Nombre podólogo/a tratante</label>
+            <input type="text" id="podologoTratante" name="podologoTratante">
+          </div>
+        </section>
+
+        <div class="ficha-actions">
+          <button type="submit" class="btn btn--primary btn--lg">Guardar ficha</button>
+          <button type="button" class="btn btn--outline btn--lg" id="printFichaBtnBottom">Imprimir ficha</button>
+          <p class="form-success" id="fichaSuccess" hidden>Ficha registrada (simulado). Aún no hay backend conectado.</p>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script src="js/ficha-podologia.js"></script>
+</body>
+</html>

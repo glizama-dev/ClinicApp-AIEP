@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha Clínica Cosmetológica | ClinicApp</title>
+  <meta name="description" content="Ficha clínica cosmetológica digital de ClinicApp: consentimiento informado, anamnesis, evaluación de piel y tratamiento estético.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ficha.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="ficha-header">
+    <div class="container ficha-header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        ClinicApp
+      </a>
+      <div class="ficha-header__title">
+        <span class="eyebrow">Cosmetología</span>
+        <h1>Ficha Clínica Cosmetológica</h1>
+      </div>
+      <div class="ficha-header__actions">
+        <button type="button" class="btn btn--outline" id="printFichaBtn">Imprimir</button>
+        <a href="index.html" class="btn btn--ghost">Volver</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="ficha-layout container">
+    <!-- Sidebar de navegación -->
+    <nav class="ficha-sidebar" id="fichaSidebar" aria-label="Secciones de la ficha">
+      <ul class="ficha-sidebar__list">
+        <li><a href="#consentimiento" class="ficha-sidebar__link">Consentimiento informado</a></li>
+        <li><a href="#datos-personales" class="ficha-sidebar__link">1. Datos personales</a></li>
+        <li><a href="#motivo-consulta" class="ficha-sidebar__link">2. Motivo de consulta</a></li>
+        <li><a href="#tipo-piel" class="ficha-sidebar__link">3. Tipo de piel</a></li>
+        <li><a href="#antecedentes-medicos" class="ficha-sidebar__link">4. Antecedentes médicos</a></li>
+        <li><a href="#antecedentes-dermatologicos" class="ficha-sidebar__link">5. Antecedentes dermatológicos</a></li>
+        <li><a href="#rutina-facial" class="ficha-sidebar__link">6. Rutina de cuidado facial</a></li>
+        <li><a href="#habitos" class="ficha-sidebar__link">7. Hábitos y estilo de vida</a></li>
+        <li><a href="#evaluacion-piel" class="ficha-sidebar__link">8. Evaluación profesional</a></li>
+        <li><a href="#contraindicaciones" class="ficha-sidebar__link">9. Contraindicaciones</a></li>
+        <li><a href="#procedimiento" class="ficha-sidebar__link">10. Procedimiento a realizar</a></li>
+        <li><a href="#observaciones" class="ficha-sidebar__link">11. Observaciones profesionales</a></li>
+      </ul>
+    </nav>
+
+    <!-- Contenido -->
+    <main class="ficha-content">
+      <form id="fichaCosmetologiaForm" novalidate>
+
+        <!-- 0. Consentimiento informado -->
+        <section class="ficha-section" id="consentimiento">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Antes de la atención</span>
+            <h2>Consentimiento informado para atención cosmetológica</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table class="plain-table">
+              <tbody>
+                <tr><th>Fecha</th><td><input type="date" name="consentFecha"></td></tr>
+                <tr><th>Lugar de la actividad</th><td><input type="text" name="consentLugar" placeholder="Ej. Clínica cosmetológica AIEP"></td></tr>
+                <tr><th>Docente a cargo de la actividad</th><td><input type="text" name="consentDocente" placeholder="Nombre del/la docente"></td></tr>
+                <tr><th>Estudiante que realiza la atención</th><td><input type="text" name="consentEstudiante" placeholder="Nombre del/la estudiante"></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="consent-text">
+            <p>Estimado/a usuario/a, antes de iniciar la atención cosmetológica, lea atentamente la siguiente información sobre el propósito, las condiciones y la finalidad de este procedimiento.</p>
+            <ol>
+              <li>La atención será realizada por estudiantes de la carrera Técnico en Cosmetología, bajo supervisión directa de un/a docente profesional calificado/a. Esta actividad tiene fines formativos, educativos y comunitarios, en el marco de una jornada sin fines de lucro organizada por una institución de educación superior.</li>
+              <li>Durante la atención se realizará una evaluación facial orientada al cuidado de la piel de manera integral (anamnesis, tipo de piel y diagnóstico estético), junto con orientación sobre cuidados y signos de alerta. Si se identifica alguna condición que requiera derivación a un/a especialista, se informará y orientará adecuadamente.</li>
+              <li>No se realizarán procedimientos invasivos ni intervenciones sin autorización. La persona atendida podrá rechazar o suspender la atención en cualquier momento, sin consecuencias.</li>
+              <li>La información entregada será tratada con confidencialidad y registrada en una ficha interna solo con fines académicos, resguardando los datos personales.</li>
+            </ol>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="consentNombre">Yo (nombre completo del paciente)</label>
+              <input type="text" id="consentNombre" name="consentNombre" placeholder="Nombre completo">
+            </div>
+            <div class="form-group">
+              <label for="consentRut">Rut</label>
+              <input type="text" id="consentRut" name="consentRut" placeholder="12.345.678-9">
+            </div>
+          </div>
+
+          <div class="consent-text">
+            <p>Declaro haber leído y comprendido la información anterior sobre el propósito y alcance de la actividad cosmetológica. Declaro además que la información proporcionada en esta ficha es verídica. En virtud de ello, manifiesto libre y voluntariamente mi decisión:</p>
+          </div>
+
+          <div class="yn-options" role="radiogroup" aria-label="Decisión de participación">
+            <label class="radio-pill"><input type="radio" name="consentDecision" value="acepto"><span>Acepto participar en la atención cosmetológica descrita</span></label>
+            <label class="radio-pill"><input type="radio" name="consentDecision" value="rechazo"><span>Rechazo participar en la atención cosmetológica descrita</span></label>
+          </div>
+
+          <div class="signature-grid">
+            <div class="signature-card">
+              <span class="signature-card__label">Firma Paciente</span>
+              <div class="signature-card__canvas-wrap">
+                <canvas class="signature-pad" data-signature="paciente" width="320" height="160"></canvas>
+              </div>
+              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="paciente">Limpiar firma</button>
+            </div>
+            <div class="signature-card">
+              <span class="signature-card__label">Firma Docente</span>
+              <div class="signature-card__canvas-wrap">
+                <canvas class="signature-pad" data-signature="docente" width="320" height="160"></canvas>
+              </div>
+              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="docente">Limpiar firma</button>
+            </div>
+            <div class="signature-card">
+              <span class="signature-card__label">Firma Estudiante</span>
+              <div class="signature-card__canvas-wrap">
+                <canvas class="signature-pad" data-signature="estudiante" width="320" height="160"></canvas>
+              </div>
+              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="estudiante">Limpiar firma</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1. Datos personales -->
+        <section class="ficha-section" id="datos-personales">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 1</span>
+            <h2>Datos personales</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="datNombre">Nombre completo</label>
+              <input type="text" id="datNombre" name="datNombre" placeholder="Nombre completo">
+            </div>
+            <div class="form-group">
+              <label for="datRut">RUT / Identificación</label>
+              <input type="text" id="datRut" name="datRut" placeholder="12.345.678-9">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="datEdad">Edad</label>
+              <input type="number" id="datEdad" name="datEdad" min="0" max="120">
+            </div>
+            <div class="form-group">
+              <label for="datFecha">Fecha</label>
+              <input type="date" id="datFecha" name="datFecha">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="datTelefono">Teléfono</label>
+              <div class="input-prefix">
+                <span>+56</span>
+                <input type="tel" id="datTelefono" name="datTelefono" placeholder="9 1234 5678">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="datCorreo">Correo electrónico</label>
+              <input type="email" id="datCorreo" name="datCorreo" placeholder="nombre@correo.cl">
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Motivo de consulta -->
+        <section class="ficha-section" id="motivo-consulta">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 2</span>
+            <h2>Motivo de consulta</h2>
+          </div>
+
+          <div class="form-group">
+            <label>Seleccione uno o más motivos</label>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="checkbox" name="motivoConsulta" value="limpieza"><span>Limpieza facial profunda</span></label>
+              <label class="radio-pill"><input type="checkbox" name="motivoConsulta" value="acne"><span>Acné</span></label>
+              <label class="radio-pill"><input type="checkbox" name="motivoConsulta" value="manchas"><span>Manchas</span></label>
+              <label class="radio-pill"><input type="checkbox" name="motivoConsulta" value="piel_grasa"><span>Piel grasa</span></label>
+              <label class="radio-pill"><input type="checkbox" name="motivoConsulta" value="puntos_negros"><span>Puntos negros</span></label>
+              <label class="radio-pill"><input type="checkbox" name="motivoConsulta" value="hidratacion"><span>Hidratación</span></label>
+              <label class="radio-pill"><input type="checkbox" name="motivoConsulta" value="otro"><span>Otro</span></label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="motivoConsultaOtro">Especifique otro motivo</label>
+            <input type="text" id="motivoConsultaOtro" name="motivoConsultaOtro">
+          </div>
+        </section>
+
+        <!-- 3. Tipo de piel (evaluación profesional) -->
+        <section class="ficha-section" id="tipo-piel">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 3</span>
+            <h2>Tipo de piel (evaluación profesional)</h2>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de piel</label>
+            <div class="yn-options" role="radiogroup" aria-label="Tipo de piel">
+              <label class="radio-pill"><input type="radio" name="tipoPiel" value="normal"><span>Normal</span></label>
+              <label class="radio-pill"><input type="radio" name="tipoPiel" value="seca"><span>Seca</span></label>
+              <label class="radio-pill"><input type="radio" name="tipoPiel" value="grasa"><span>Grasa</span></label>
+              <label class="radio-pill"><input type="radio" name="tipoPiel" value="mixta"><span>Mixta</span></label>
+              <label class="radio-pill"><input type="radio" name="tipoPiel" value="sensible"><span>Sensible</span></label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tipoPielObs">Observaciones</label>
+            <textarea id="tipoPielObs" name="tipoPielObs" rows="3"></textarea>
+          </div>
+        </section>
+
+        <!-- 4. Antecedentes médicos -->
+        <section class="ficha-section" id="antecedentes-medicos">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 4</span>
+            <h2>Antecedentes médicos</h2>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Presenta alguna enfermedad?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="enfermedad" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="enfermedad" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="enfermedadDetalle" placeholder="¿Cuál?">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Está embarazada?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="embarazada" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="embarazada" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="embarazadaObs" placeholder="Observaciones">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Toma medicamentos actualmente?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="medicamentos" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="medicamentos" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="medicamentosDetalle" placeholder="¿Cuáles?">
+          </div>
+
+          <div class="yn-row yn-row--textarea">
+            <span class="yn-row__label">Alergias (cosméticos, medicamentos, alimentos)</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="alergias" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="alergias" value="no"><span>No</span></label>
+            </div>
+            <textarea class="yn-detail" name="alergiasDetalle" rows="2" placeholder="Especifique"></textarea>
+          </div>
+        </section>
+
+        <!-- 5. Antecedentes dermatológicos -->
+        <section class="ficha-section" id="antecedentes-dermatologicos">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 5</span>
+            <h2>Antecedentes dermatológicos</h2>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Ha tenido acné?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="haTenidoAcne" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="haTenidoAcne" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="haTenidoAcneDetalle" placeholder="Detalle">
+          </div>
+
+          <div class="yn-row yn-row--textarea">
+            <span class="yn-row__label">¿Presenta actualmente lesiones (quistes, pústulas, etc.)?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="lesionesActuales" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="lesionesActuales" value="no"><span>No</span></label>
+            </div>
+            <textarea class="yn-detail" name="lesionesActualesDetalle" rows="2" placeholder="Especifique"></textarea>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Tiene rosácea o piel sensible?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="rosacea" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="rosacea" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="rosaceaDetalle" placeholder="Detalle">
+          </div>
+
+          <div class="yn-row yn-row--textarea">
+            <span class="yn-row__label">¿Ha recibido tratamientos dermatológicos recientes?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="tratDermatologicos" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="tratDermatologicos" value="no"><span>No</span></label>
+            </div>
+            <textarea class="yn-detail" name="tratDermatologicosDetalle" rows="2" placeholder="Especifique"></textarea>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Se ha realizado peeling químico recientemente?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="peelingQuimico" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="peelingQuimico" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="peelingQuimicoDetalle" placeholder="Detalle">
+          </div>
+        </section>
+
+        <!-- 6. Rutina de cuidado facial -->
+        <section class="ficha-section" id="rutina-facial">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 6</span>
+            <h2>Rutina de cuidado facial</h2>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Limpia su rostro diariamente?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="limpiaDiariamente" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="limpiaDiariamente" value="no"><span>No</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Usa protector solar?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="usaProtectorSolar" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="usaProtectorSolar" value="no"><span>No</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">¿Utiliza productos cosméticos?</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="usaCosmeticos" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="usaCosmeticos" value="no"><span>No</span></label>
+            </div>
+            <input type="text" class="yn-detail" name="usaCosmeticosDetalle" placeholder="¿Cuáles?">
+          </div>
+
+          <div class="form-group">
+            <label for="frecuenciaExfoliacion">Frecuencia de exfoliación</label>
+            <input type="text" id="frecuenciaExfoliacion" name="frecuenciaExfoliacion" placeholder="Ej. 1 vez por semana">
+          </div>
+        </section>
+
+        <!-- 7. Hábitos y estilo de vida -->
+        <section class="ficha-section" id="habitos">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 7</span>
+            <h2>Hábitos y estilo de vida</h2>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Consumo de agua</span>
+            <div class="yn-options" role="radiogroup" aria-label="Consumo de agua">
+              <label class="radio-pill"><input type="radio" name="consumoAgua" value="bajo"><span>Bajo</span></label>
+              <label class="radio-pill"><input type="radio" name="consumoAgua" value="medio"><span>Medio</span></label>
+              <label class="radio-pill"><input type="radio" name="consumoAgua" value="alto"><span>Alto</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Alimentación</span>
+            <div class="yn-options" role="radiogroup" aria-label="Alimentación">
+              <label class="radio-pill"><input type="radio" name="alimentacion" value="saludable"><span>Saludable</span></label>
+              <label class="radio-pill"><input type="radio" name="alimentacion" value="regular"><span>Regular</span></label>
+              <label class="radio-pill"><input type="radio" name="alimentacion" value="deficiente"><span>Deficiente</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Consumo de alcohol</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="consumoAlcohol" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="consumoAlcohol" value="no"><span>No</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Fuma</span>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="radio" name="fuma" value="si"><span>Sí</span></label>
+              <label class="radio-pill"><input type="radio" name="fuma" value="no"><span>No</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Nivel de estrés</span>
+            <div class="yn-options" role="radiogroup" aria-label="Nivel de estrés">
+              <label class="radio-pill"><input type="radio" name="nivelEstres" value="bajo"><span>Bajo</span></label>
+              <label class="radio-pill"><input type="radio" name="nivelEstres" value="medio"><span>Medio</span></label>
+              <label class="radio-pill"><input type="radio" name="nivelEstres" value="alto"><span>Alto</span></label>
+            </div>
+            <span></span>
+          </div>
+        </section>
+
+        <!-- 8. Evaluación profesional de la piel -->
+        <section class="ficha-section" id="evaluacion-piel">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 8</span>
+            <h2>Evaluación profesional de la piel</h2>
+          </div>
+
+          <div class="form-group">
+            <label for="evalTextura">Textura</label>
+            <input type="text" id="evalTextura" name="evalTextura">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Poros</span>
+            <div class="yn-options" role="radiogroup" aria-label="Poros">
+              <label class="radio-pill"><input type="radio" name="poros" value="dilatados"><span>Dilatados</span></label>
+              <label class="radio-pill"><input type="radio" name="poros" value="normales"><span>Normales</span></label>
+              <label class="radio-pill"><input type="radio" name="poros" value="obstruidos"><span>Obstruidos</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="form-group">
+            <label for="evalLesiones">Lesiones</label>
+            <input type="text" id="evalLesiones" name="evalLesiones">
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Nivel de hidratación</span>
+            <div class="yn-options" role="radiogroup" aria-label="Nivel de hidratación">
+              <label class="radio-pill"><input type="radio" name="nivelHidratacion" value="bajo"><span>Bajo</span></label>
+              <label class="radio-pill"><input type="radio" name="nivelHidratacion" value="medio"><span>Medio</span></label>
+              <label class="radio-pill"><input type="radio" name="nivelHidratacion" value="alto"><span>Alto</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="yn-row">
+            <span class="yn-row__label">Sensibilidad</span>
+            <div class="yn-options" role="radiogroup" aria-label="Sensibilidad">
+              <label class="radio-pill"><input type="radio" name="sensibilidad" value="baja"><span>Baja</span></label>
+              <label class="radio-pill"><input type="radio" name="sensibilidad" value="media"><span>Media</span></label>
+              <label class="radio-pill"><input type="radio" name="sensibilidad" value="alta"><span>Alta</span></label>
+            </div>
+            <span></span>
+          </div>
+
+          <div class="form-group">
+            <label for="diagnosticoEstetico">Diagnóstico estético</label>
+            <textarea id="diagnosticoEstetico" name="diagnosticoEstetico" rows="3"></textarea>
+          </div>
+        </section>
+
+        <!-- 9. Contraindicaciones -->
+        <section class="ficha-section" id="contraindicaciones">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 9</span>
+            <h2>Contraindicaciones</h2>
+          </div>
+
+          <div class="form-group">
+            <label>Seleccione si corresponde</label>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="checkbox" name="contraindicaciones" value="heridas_abiertas"><span>Heridas abiertas</span></label>
+              <label class="radio-pill"><input type="checkbox" name="contraindicaciones" value="infecciones_cutaneas"><span>Infecciones cutáneas</span></label>
+              <label class="radio-pill"><input type="checkbox" name="contraindicaciones" value="quemaduras_solares"><span>Quemaduras solares</span></label>
+              <label class="radio-pill"><input type="checkbox" name="contraindicaciones" value="dermatitis_activa"><span>Dermatitis activa</span></label>
+              <label class="radio-pill"><input type="checkbox" name="contraindicaciones" value="tratamientos_medicos_recientes"><span>Tratamientos médicos recientes</span></label>
+              <label class="radio-pill"><input type="checkbox" name="contraindicaciones" value="otra"><span>Otra</span></label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contraindicacionesOtra">Especifique otra</label>
+            <input type="text" id="contraindicacionesOtra" name="contraindicacionesOtra">
+          </div>
+        </section>
+
+        <!-- 10. Procedimiento a realizar -->
+        <section class="ficha-section" id="procedimiento">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 10</span>
+            <h2>Procedimiento a realizar</h2>
+          </div>
+
+          <div class="form-group">
+            <label>Seleccione uno o más procedimientos</label>
+            <div class="yn-options">
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="higienizacion"><span>Higienización</span></label>
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="exfoliacion"><span>Exfoliación</span></label>
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="vapor_ozono"><span>Vapor ozono</span></label>
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="extraccion_comedones"><span>Extracción de comedones</span></label>
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="alta_frecuencia"><span>Alta frecuencia</span></label>
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="mascarilla"><span>Mascarilla</span></label>
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="hidratacion"><span>Hidratación</span></label>
+              <label class="radio-pill"><input type="checkbox" name="procedimiento" value="proteccion_solar"><span>Protección solar</span></label>
+            </div>
+          </div>
+        </section>
+
+        <!-- 11. Observaciones profesionales -->
+        <section class="ficha-section" id="observaciones">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 11</span>
+            <h2>Observaciones profesionales</h2>
+          </div>
+          <div class="form-group">
+            <label for="observacionesTexto">Observaciones del tratamiento realizado</label>
+            <textarea id="observacionesTexto" name="observacionesTexto" rows="6" placeholder="Describa las observaciones y recomendaciones entregadas..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="cosmetologoTratante">Nombre cosmetólogo/a tratante</label>
+            <input type="text" id="cosmetologoTratante" name="cosmetologoTratante">
+          </div>
+        </section>
+
+        <div class="ficha-actions">
+          <button type="submit" class="btn btn--primary btn--lg">Guardar ficha</button>
+          <button type="button" class="btn btn--outline btn--lg" id="printFichaBtnBottom">Imprimir ficha</button>
+          <p class="form-success" id="fichaSuccess" hidden>Ficha registrada (simulado). Aún no hay backend conectado.</p>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script src="js/ficha-cosmetologia.js"></script>
+</body>
+</html>
