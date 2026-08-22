@@ -118,7 +118,7 @@
     });
   });
 
-  /* ===== Login form (UI only, no backend yet) ===== */
+  /* ===== Login form ===== */
   const loginError = document.getElementById('loginError');
 
   loginForm.addEventListener('submit', (e) => {
@@ -127,6 +127,7 @@
 
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
+    const remember = loginForm.elements.remember.checked;
 
     if (!email || !password) {
       loginError.textContent = 'Completa tu correo y contraseña.';
@@ -134,13 +135,23 @@
       return;
     }
 
-    // Placeholder: no hay backend conectado todavía.
-    console.log('Login submitted:', { email });
-    loginError.hidden = true;
-    alert('Inicio de sesión simulado. Aún no hay backend conectado.');
-    closeModal();
+    const user = window.ClinicAppAuth.login(email, password);
+
+    if (!user) {
+      loginError.textContent = 'Correo o contraseña incorrectos.';
+      loginError.hidden = false;
+      return;
+    }
+
+    window.ClinicAppAuth.saveSession(user, remember);
     loginForm.reset();
+    window.location.href = user.page;
   });
+
+  // Si llegamos redirigidos desde una ficha protegida, abrir el login.
+  if (new URLSearchParams(window.location.search).get('login') === '1') {
+    openModal('login');
+  }
 
   /* ===== Register form (UI only, no backend yet) ===== */
   const registerError = document.getElementById('registerError');

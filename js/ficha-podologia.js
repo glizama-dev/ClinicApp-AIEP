@@ -1,6 +1,17 @@
 (function () {
   'use strict';
 
+  /* ===== Control de acceso ===== */
+  if (!window.ClinicAppAuth.requireSession('podologia')) return;
+
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      window.ClinicAppAuth.logout();
+      window.location.href = 'index.html';
+    });
+  }
+
   /* ===== Sidebar scroll-spy ===== */
   const sections = document.querySelectorAll('.ficha-section');
   const sidebarLinks = document.querySelectorAll('.ficha-sidebar__link');
