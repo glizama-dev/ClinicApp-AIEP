@@ -98,29 +98,37 @@
             <label class="radio-pill"><input type="radio" name="consentDecision" value="rechazo"><span>Rechazo participar en la atención podológica descrita</span></label>
           </div>
 
-          <div class="signature-grid">
-            <div class="signature-card">
-              <span class="signature-card__label">Firma Paciente</span>
-              <div class="signature-card__canvas-wrap">
-                <canvas class="signature-pad" data-signature="paciente" width="320" height="160"></canvas>
+          <details class="signature-panel">
+            <summary class="signature-panel__toggle">
+              <span class="signature-panel__toggle-text--closed">Desplegar panel de firmas</span>
+              <span class="signature-panel__toggle-text--open">Ocultar panel de firmas</span>
+              <svg class="signature-panel__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <p class="ficha-hint">Toque para dibujar cada firma. En pantallas táctiles, evite deslizar dentro del recuadro mientras el panel esté abierto.</p>
+            <div class="signature-grid">
+              <div class="signature-card">
+                <span class="signature-card__label">Firma Paciente</span>
+                <div class="signature-card__canvas-wrap">
+                  <canvas class="signature-pad" data-signature="paciente" width="320" height="160"></canvas>
+                </div>
+                <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="paciente">Limpiar firma</button>
               </div>
-              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="paciente">Limpiar firma</button>
-            </div>
-            <div class="signature-card">
-              <span class="signature-card__label">Firma Docente</span>
-              <div class="signature-card__canvas-wrap">
-                <canvas class="signature-pad" data-signature="docente" width="320" height="160"></canvas>
+              <div class="signature-card">
+                <span class="signature-card__label">Firma Docente</span>
+                <div class="signature-card__canvas-wrap">
+                  <canvas class="signature-pad" data-signature="docente" width="320" height="160"></canvas>
+                </div>
+                <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="docente">Limpiar firma</button>
               </div>
-              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="docente">Limpiar firma</button>
-            </div>
-            <div class="signature-card">
-              <span class="signature-card__label">Firma Estudiante</span>
-              <div class="signature-card__canvas-wrap">
-                <canvas class="signature-pad" data-signature="estudiante" width="320" height="160"></canvas>
+              <div class="signature-card">
+                <span class="signature-card__label">Firma Estudiante</span>
+                <div class="signature-card__canvas-wrap">
+                  <canvas class="signature-pad" data-signature="estudiante" width="320" height="160"></canvas>
+                </div>
+                <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="estudiante">Limpiar firma</button>
               </div>
-              <button type="button" class="btn btn--ghost btn--sm signature-clear" data-clear-target="estudiante">Limpiar firma</button>
             </div>
-          </div>
+          </details>
         </section>
 
         <!-- 1. Antecedentes personales -->

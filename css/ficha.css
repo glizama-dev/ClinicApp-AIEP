@@ -210,6 +210,35 @@ body { background: var(--color-bg-soft); }
 .input-prefix input:focus { outline: none; box-shadow: none; }
 
 /* ============ Firmas ============ */
+.signature-panel { margin-top: 22px; }
+
+.signature-panel__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  background: transparent;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.signature-panel__toggle::-webkit-details-marker { display: none; }
+.signature-panel__toggle:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+.signature-panel__chevron { transition: transform 0.2s ease; }
+.signature-panel[open] .signature-panel__chevron { transform: rotate(180deg); }
+.signature-panel[open] .signature-panel__toggle { margin-bottom: 4px; }
+
+.signature-panel__toggle-text--open { display: none; }
+.signature-panel[open] .signature-panel__toggle-text--open { display: inline; }
+.signature-panel[open] .signature-panel__toggle-text--closed { display: none; }
+
 .signature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 22px; }
 
 .signature-card { display: flex; flex-direction: column; gap: 8px; }
@@ -255,7 +284,10 @@ body { background: var(--color-bg-soft); }
 
 .swme-table-wrap, .topo-table-wrap { width: 100%; }
 
-.topo-table th:first-child, .topo-table td:first-child { width: 60px; }
+.swme-table tbody th, .topo-table tbody th { min-width: 0; }
+
+.swme-table th:first-child, .swme-table td:first-child { width: 110px; }
+.topo-table th:first-child, .topo-table td:first-child { width: 70px; }
 
 /* ============ Acciones finales ============ */
 .ficha-actions {
@@ -298,6 +330,14 @@ body { background: var(--color-bg-soft); }
   .habits-row__fields { grid-template-columns: repeat(2, 1fr); }
   .vitals-grid { grid-template-columns: 1fr; }
   .diagram-grid--3, .diagram-grid--4 { grid-template-columns: repeat(2, 1fr); }
+
+  .plain-table, .plain-table tbody, .plain-table tr, .plain-table th, .plain-table td {
+    display: block;
+    width: 100%;
+  }
+  .plain-table tr { margin-bottom: 10px; }
+  .plain-table th { border-bottom: none; padding-bottom: 6px; }
+  .plain-table td { border-top: none; padding-top: 0; }
 }
 
 /* ============ Impresión ============ */
