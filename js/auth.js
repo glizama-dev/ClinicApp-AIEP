@@ -1,75 +1,116 @@
 (function () {
   'use strict';
 
-  // Usuarios de prueba (sin backend real: sirve solo para la demo estática).
-  const TEST_USERS = [
-    {
-      email: 'podologia@correoaiep.cl',
-      password: '12345678',
-      name: 'Usuario Podología',
-      specialty: 'podologia',
-      page: 'ficha-podologia.html',
-    },
-    {
-      email: 'cosmetologia@correoaiep.cl',
-      password: '12345678',
-      name: 'Usuario Cosmetología',
-      specialty: 'cosmetologia',
-      page: 'ficha-cosmetologia.html',
-    },
-  ];
+  var api = window.ClinicAppApi;
 
-  const SESSION_KEY = 'clinicapp_session';
+  var PAGE_BY_SPECIALTY = {
+    podologia: 'ficha-podologia.html',
+    cosmetologia: 'ficha-cosmetologia.html',
+  };
 
-  function login(email, password) {
-    const normalizedEmail = String(email || '').trim().toLowerCase();
-    const user = TEST_USERS.find(
-      (u) => u.email === normalizedEmail && u.password === password
-    );
-    return user || null;
-  }
-
-  function saveSession(user, remember) {
-    const data = JSON.stringify({
-      email: user.email,
-      name: user.name,
-      specialty: user.specialty,
-    });
-    const storage = remember ? window.localStorage : window.sessionStorage;
-    storage.setItem(SESSION_KEY, data);
-  }
+  /* ===== Utilidades de sesion ===== */
 
   function getSession() {
-    const raw =
-      window.localStorage.getItem(SESSION_KEY) ||
-      window.sessionStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    try {
-      return JSON.parse(raw);
-    } catch (err) {
-      return null;
-    }
+    return api.getUser();
   }
 
   function logout() {
-    window.localStorage.removeItem(SESSION_KEY);
-    window.sessionStorage.removeItem(SESSION_KEY);
+    api.clearAuth();
   }
 
-  function requireSession(specialty) {
-    const session = getSession();
-    if (!session || session.specialty !== specialty) {
+  // Decodifica el payload del JWT sin verificar la firma (solo para saber si expiro).
+  function tokenExpirado() {
+    var token = api.getToken();
+    if (!token) return true;
+    try {
+      var payload = JSON.parse(atob(token.split('.')[1]));
+      return typeof payload.exp === 'number' && payload.exp * 1000 < Date.now();
+    } catch (err) {
+      return true;
+    }
+  }
+
+  function especialidadPermitida(usuario, especialidad) {
+    if (!usuario) return false;
+    if (usuario.rol === 'admin') return true;
+    return usuario.especialidad === especialidad || usuario.especialidad === 'ambas';
+  }
+
+  /** Pagina de ficha a la que redirigir tras iniciar sesion. */
+  function pageForUser(usuario) {
+    if (!usuario) return 'index.html';
+    if (usuario.especialidad === 'ambas' || usuario.rol === 'admin') {
+      return PAGE_BY_SPECIALTY.podologia;
+    }
+    return PAGE_BY_SPECIALTY[usuario.especialidad] || 'index.html';
+  }
+
+  /**
+   * Protege una pagina de ficha. Redirige al login si no hay sesion valida
+   * o si la especialidad no corresponde.
+   * @param {string} especialidad
+   * @returns {object|null} usuario
+   */
+  function requireSession(especialidad) {
+    var usuario = getSession();
+    if (!usuario || tokenExpirado()) {
+      logout();
       window.location.href = 'index.html?login=1';
       return null;
     }
-    return session;
+    if (!especialidadPermitida(usuario, especialidad)) {
+      window.location.href = 'index.html?login=1';
+      return null;
+    }
+    return usuario;
+  }
+
+  /* ===== Llamadas a la API de autenticacion ===== */
+
+  async function login(email, password, remember) {
+    var data = await api.apiFetch('/api/auth/login', {
+      method: 'POST',
+      auth: false,
+      body: { email: email, password: password },
+    });
+    api.saveAuth(data.token, data.usuario, !!remember);
+    return data.usuario;
+  }
+
+  async function register(payload) {
+    return api.apiFetch('/api/auth/register', {
+      method: 'POST',
+      auth: false,
+      body: payload,
+    });
+  }
+
+  async function verifyCode(email, codigo, remember) {
+    var data = await api.apiFetch('/api/auth/verify', {
+      method: 'POST',
+      auth: false,
+      body: { email: email, codigo: codigo },
+    });
+    api.saveAuth(data.token, data.usuario, !!remember);
+    return data.usuario;
+  }
+
+  async function resendCode(email) {
+    return api.apiFetch('/api/auth/resend', {
+      method: 'POST',
+      auth: false,
+      body: { email: email },
+    });
   }
 
   window.ClinicAppAuth = {
-    login,
-    saveSession,
-    getSession,
-    logout,
-    requireSession,
+    login: login,
+    register: register,
+    verifyCode: verifyCode,
+    resendCode: resendCode,
+    getSession: getSession,
+    logout: logout,
+    requireSession: requireSession,
+    pageForUser: pageForUser,
   };
 })();

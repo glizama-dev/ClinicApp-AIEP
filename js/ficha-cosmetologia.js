@@ -89,14 +89,71 @@
     if (btn) btn.addEventListener('click', () => window.print());
   });
 
-  /* ===== Envío (simulado, sin backend aún) ===== */
+  /* ===== Envío al backend ===== */
   const form = document.getElementById('fichaCosmetologiaForm');
   const success = document.getElementById('fichaSuccess');
+  const fichaError = document.getElementById('fichaError');
+  const ficha = window.ClinicAppFicha;
 
-  form.addEventListener('submit', (e) => {
+  function mostrarError(mensaje) {
+    fichaError.textContent = mensaje;
+    fichaError.hidden = false;
+    fichaError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    success.hidden = false;
-    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => { success.hidden = true; }, 5000);
+    success.hidden = true;
+    fichaError.hidden = true;
+
+    const datos = ficha.formToObject(form);
+    const firmas = ficha.leerFirmas(form);
+
+    const rut = String(datos.datRut || datos.consentRut || '').trim();
+    const nombre = String(datos.datNombre || datos.consentNombre || '').trim();
+    if (!rut || !nombre) {
+      mostrarError('Completa al menos el RUT y el nombre del paciente en la sección Datos personales.');
+      return;
+    }
+
+    const correo = String(datos.datCorreo || '').trim();
+    const payload = {
+      especialidad: 'cosmetologia',
+      fechaAtencion:
+        String(datos.datFecha || datos.consentFecha || '').trim() || ficha.hoyISO(),
+      paciente: {
+        rut: rut,
+        nombre: nombre,
+        telefono: String(datos.datTelefono || '').trim() || null,
+        email: correo || null,
+      },
+      datos: datos,
+      firmas: firmas,
+    };
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const res = await window.ClinicAppApi.apiFetch('/api/fichas', {
+        method: 'POST',
+        body: payload,
+      });
+      success.textContent = `Ficha registrada correctamente (N° ${res.id}).`;
+      success.hidden = false;
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      form.reset();
+      form.querySelectorAll('.signature-pad').forEach((c) => {
+        c.getContext('2d').clearRect(0, 0, c.width, c.height);
+      });
+    } catch (err) {
+      if (err && err.status === 401) {
+        window.location.href = 'index.html?login=1';
+        return;
+      }
+      mostrarError((err && err.message) || 'No se pudo guardar la ficha.');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
   });
 })();

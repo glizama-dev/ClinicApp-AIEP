@@ -584,6 +584,21 @@ img { max-width: 100%; display: block; }
   padding: 10px 12px;
   border-radius: var(--radius-sm);
 }
+.auth-form__hint { font-size: 0.85rem; color: var(--color-text-muted); }
+.auth-form__hint .link-small {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.form-error {
+  color: var(--color-danger);
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #fdeeee;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+}
 
 /* ============ Scroll reveal ============ */
 .reveal {

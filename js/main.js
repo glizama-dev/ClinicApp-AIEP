@@ -67,6 +67,11 @@
   const tabRegister = document.getElementById('tabRegister');
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
+  const verifyForm = document.getElementById('verifyForm');
+
+  // Datos que arrastramos entre "crear cuenta" y "verificar código".
+  let pendingEmail = '';
+  let pendingRemember = false;
 
   function openModal(tab) {
     overlay.classList.add('is-open');
@@ -81,10 +86,24 @@
 
   function switchTab(tab) {
     const isLogin = tab === 'login';
+    const isRegister = tab === 'register';
+    const isVerify = tab === 'verify';
     tabLogin.classList.toggle('modal__tab--active', isLogin);
-    tabRegister.classList.toggle('modal__tab--active', !isLogin);
+    tabRegister.classList.toggle('modal__tab--active', isRegister || isVerify);
     loginForm.hidden = !isLogin;
-    registerForm.hidden = isLogin;
+    registerForm.hidden = !isRegister;
+    verifyForm.hidden = !isVerify;
+  }
+
+  function goToVerifyStep(email, remember) {
+    pendingEmail = email;
+    pendingRemember = !!remember;
+    const label = document.getElementById('verifyEmailLabel');
+    if (label) label.textContent = email;
+    const codeInput = document.getElementById('verifyCode');
+    if (codeInput) codeInput.value = '';
+    switchTab('verify');
+    if (codeInput) codeInput.focus();
   }
 
   openBtns.forEach((btn) => btn.addEventListener('click', () => openModal('login')));
@@ -118,10 +137,24 @@
     });
   });
 
+  function setFormLoading(form, loading) {
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) {
+      btn.disabled = loading;
+      if (loading && !btn.dataset.label) btn.dataset.label = btn.textContent;
+      if (btn.dataset.label) btn.textContent = loading ? 'Procesando…' : btn.dataset.label;
+    }
+  }
+
+  function showError(el, message) {
+    el.textContent = message;
+    el.hidden = false;
+  }
+
   /* ===== Login form ===== */
   const loginError = document.getElementById('loginError');
 
-  loginForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     loginError.hidden = true;
 
@@ -130,22 +163,32 @@
     const remember = loginForm.elements.remember.checked;
 
     if (!email || !password) {
-      loginError.textContent = 'Completa tu correo y contraseña.';
-      loginError.hidden = false;
+      showError(loginError, 'Completa tu correo y contraseña.');
       return;
     }
 
-    const user = window.ClinicAppAuth.login(email, password);
-
-    if (!user) {
-      loginError.textContent = 'Correo o contraseña incorrectos.';
-      loginError.hidden = false;
-      return;
+    setFormLoading(loginForm, true);
+    try {
+      const user = await window.ClinicAppAuth.login(email, password, remember);
+      loginForm.reset();
+      closeModal();
+      window.location.href = window.ClinicAppAuth.pageForUser(user);
+    } catch (err) {
+      if (err && err.code === 'EMAIL_NO_VERIFICADO') {
+        try {
+          await window.ClinicAppAuth.resendCode(email);
+        } catch (_) { /* ignorar: igual mostramos el paso de verificación */ }
+        goToVerifyStep(email, remember);
+        showError(
+          document.getElementById('verifyError'),
+          'Tu correo aún no está verificado. Te enviamos un código nuevo.'
+        );
+      } else {
+        showError(loginError, (err && err.message) || 'No se pudo iniciar sesión.');
+      }
+    } finally {
+      setFormLoading(loginForm, false);
     }
-
-    window.ClinicAppAuth.saveSession(user, remember);
-    loginForm.reset();
-    window.location.href = user.page;
   });
 
   // Si llegamos redirigidos desde una ficha protegida, abrir el login.
@@ -153,31 +196,76 @@
     openModal('login');
   }
 
-  /* ===== Register form (UI only, no backend yet) ===== */
+  /* ===== Register form ===== */
   const registerError = document.getElementById('registerError');
 
-  registerForm.addEventListener('submit', (e) => {
+  registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     registerError.hidden = true;
 
-    const email = document.getElementById('registerEmail').value.trim();
+    const payload = {
+      nombre: document.getElementById('registerName').value.trim(),
+      rol: document.getElementById('registerRole').value,
+      especialidad: document.getElementById('registerSpecialty').value,
+      email: document.getElementById('registerEmail').value.trim().toLowerCase(),
+      password: document.getElementById('registerPassword').value,
+    };
 
-    if (!email.toLowerCase().endsWith(INSTITUTIONAL_EMAIL_DOMAIN)) {
-      registerError.hidden = false;
+    if (!payload.email.endsWith(INSTITUTIONAL_EMAIL_DOMAIN)) {
+      showError(registerError, `Debes registrarte con tu correo institucional ${INSTITUTIONAL_EMAIL_DOMAIN}`);
       return;
     }
 
-    // Placeholder: no hay backend conectado todavía.
-    console.log('Register submitted:', {
-      name: document.getElementById('registerName').value,
-      role: document.getElementById('registerRole').value,
-      specialty: document.getElementById('registerSpecialty').value,
-      email,
-    });
+    setFormLoading(registerForm, true);
+    try {
+      await window.ClinicAppAuth.register(payload);
+      registerForm.reset();
+      goToVerifyStep(payload.email, false);
+    } catch (err) {
+      showError(registerError, (err && err.message) || 'No se pudo crear la cuenta.');
+    } finally {
+      setFormLoading(registerForm, false);
+    }
+  });
 
-    alert('Cuenta creada (simulado). Aún no hay backend conectado.');
-    closeModal();
-    registerForm.reset();
+  /* ===== Verify form ===== */
+  const verifyError = document.getElementById('verifyError');
+  const resendCodeBtn = document.getElementById('resendCodeBtn');
+
+  verifyForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    verifyError.hidden = true;
+
+    const codigo = document.getElementById('verifyCode').value.trim();
+    if (!/^\d{6}$/.test(codigo)) {
+      showError(verifyError, 'Ingresa el código de 6 dígitos.');
+      return;
+    }
+
+    setFormLoading(verifyForm, true);
+    try {
+      const user = await window.ClinicAppAuth.verifyCode(pendingEmail, codigo, pendingRemember);
+      verifyForm.reset();
+      closeModal();
+      window.location.href = window.ClinicAppAuth.pageForUser(user);
+    } catch (err) {
+      showError(verifyError, (err && err.message) || 'No se pudo verificar el código.');
+    } finally {
+      setFormLoading(verifyForm, false);
+    }
+  });
+
+  resendCodeBtn.addEventListener('click', async () => {
+    verifyError.hidden = true;
+    resendCodeBtn.disabled = true;
+    try {
+      await window.ClinicAppAuth.resendCode(pendingEmail);
+      showError(verifyError, 'Código reenviado. Revisa tu correo.');
+    } catch (err) {
+      showError(verifyError, (err && err.message) || 'No se pudo reenviar el código.');
+    } finally {
+      setTimeout(() => { resendCodeBtn.disabled = false; }, 3000);
+    }
   });
 
   /* ===== Contact form (UI only) ===== */

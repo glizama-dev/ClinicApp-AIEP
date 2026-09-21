@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (nunca commitear secretos)
+.env
+.env.local
+
+# Frontend montado por docker-compose (placeholders, el contenido real viene por volumen/COPY)
+server/public/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema
+.DS_Store
+Thumbs.db

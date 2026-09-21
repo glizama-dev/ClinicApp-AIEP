@@ -1,0 +1,68 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_NAME:-clinicapp}
+      MYSQL_USER: ${DB_USER:-clinicapp}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-clinicapp}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # interfaz web
+
+  adminer:
+    image: adminer:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"   # interfaz web para ver/editar la base de datos
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      NODE_ENV: development
+      STATIC_DIR: /app/public
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - ./index.html:/app/public/index.html
+      - ./ficha-podologia.html:/app/public/ficha-podologia.html
+      - ./ficha-cosmetologia.html:/app/public/ficha-cosmetologia.html
+      - ./css:/app/public/css
+      - ./js:/app/public/js
+      - ./img:/app/public/img
+
+volumes:
+  db_data:
