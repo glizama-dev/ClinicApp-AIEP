@@ -41,18 +41,8 @@ const config = {
     expiresIn: optional('JWT_EXPIRES', '8h'),
   },
 
-  smtp: {
-    host: optional('SMTP_HOST', 'mailhog'),
-    port: int('SMTP_PORT', 1025),
-    user: optional('SMTP_USER', ''),
-    pass: optional('SMTP_PASS', ''),
-    from: optional('MAIL_FROM', 'ClinicApp <no-reply@clinicapp.local>'),
-  },
-
   auth: {
     allowedEmailDomain: optional('ALLOWED_EMAIL_DOMAIN', '@correoaiep.cl').toLowerCase(),
-    codeTtlMinutes: int('CODE_TTL_MINUTES', 15),
-    codeMaxAttempts: int('CODE_MAX_ATTEMPTS', 5),
   },
 
   corsOrigin: optional('CORS_ORIGIN', 'http://localhost:3000'),

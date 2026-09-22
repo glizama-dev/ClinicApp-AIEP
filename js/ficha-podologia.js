@@ -138,10 +138,14 @@
     const datos = ficha.formToObject(form);
     const firmas = ficha.leerFirmas(form);
 
-    const rut = String(datos.antRut || datos.consentRut || '').trim();
+    const rut = String(datos.antRut || datos.consentRut || '').trim().toUpperCase();
     const nombre = String(datos.antNombre || datos.consentNombre || '').trim();
     if (!rut || !nombre) {
       mostrarError('Completa al menos el RUT y el nombre del paciente en la sección Antecedentes.');
+      return;
+    }
+    if (!ficha.esRutValido(rut)) {
+      mostrarError('El RUT del paciente no es válido. Usa el formato 12345678-9, sin puntos.');
       return;
     }
 

@@ -67,11 +67,6 @@
   const tabRegister = document.getElementById('tabRegister');
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
-  const verifyForm = document.getElementById('verifyForm');
-
-  // Datos que arrastramos entre "crear cuenta" y "verificar código".
-  let pendingEmail = '';
-  let pendingRemember = false;
 
   function openModal(tab) {
     overlay.classList.add('is-open');
@@ -87,23 +82,10 @@
   function switchTab(tab) {
     const isLogin = tab === 'login';
     const isRegister = tab === 'register';
-    const isVerify = tab === 'verify';
     tabLogin.classList.toggle('modal__tab--active', isLogin);
-    tabRegister.classList.toggle('modal__tab--active', isRegister || isVerify);
+    tabRegister.classList.toggle('modal__tab--active', isRegister);
     loginForm.hidden = !isLogin;
     registerForm.hidden = !isRegister;
-    verifyForm.hidden = !isVerify;
-  }
-
-  function goToVerifyStep(email, remember) {
-    pendingEmail = email;
-    pendingRemember = !!remember;
-    const label = document.getElementById('verifyEmailLabel');
-    if (label) label.textContent = email;
-    const codeInput = document.getElementById('verifyCode');
-    if (codeInput) codeInput.value = '';
-    switchTab('verify');
-    if (codeInput) codeInput.focus();
   }
 
   openBtns.forEach((btn) => btn.addEventListener('click', () => openModal('login')));
@@ -174,18 +156,7 @@
       closeModal();
       window.location.href = window.ClinicAppAuth.pageForUser(user);
     } catch (err) {
-      if (err && err.code === 'EMAIL_NO_VERIFICADO') {
-        try {
-          await window.ClinicAppAuth.resendCode(email);
-        } catch (_) { /* ignorar: igual mostramos el paso de verificación */ }
-        goToVerifyStep(email, remember);
-        showError(
-          document.getElementById('verifyError'),
-          'Tu correo aún no está verificado. Te enviamos un código nuevo.'
-        );
-      } else {
-        showError(loginError, (err && err.message) || 'No se pudo iniciar sesión.');
-      }
+      showError(loginError, (err && err.message) || 'No se pudo iniciar sesión.');
     } finally {
       setFormLoading(loginForm, false);
     }
@@ -218,53 +189,14 @@
 
     setFormLoading(registerForm, true);
     try {
-      await window.ClinicAppAuth.register(payload);
+      const user = await window.ClinicAppAuth.register(payload);
       registerForm.reset();
-      goToVerifyStep(payload.email, false);
+      closeModal();
+      window.location.href = window.ClinicAppAuth.pageForUser(user);
     } catch (err) {
       showError(registerError, (err && err.message) || 'No se pudo crear la cuenta.');
     } finally {
       setFormLoading(registerForm, false);
-    }
-  });
-
-  /* ===== Verify form ===== */
-  const verifyError = document.getElementById('verifyError');
-  const resendCodeBtn = document.getElementById('resendCodeBtn');
-
-  verifyForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    verifyError.hidden = true;
-
-    const codigo = document.getElementById('verifyCode').value.trim();
-    if (!/^\d{6}$/.test(codigo)) {
-      showError(verifyError, 'Ingresa el código de 6 dígitos.');
-      return;
-    }
-
-    setFormLoading(verifyForm, true);
-    try {
-      const user = await window.ClinicAppAuth.verifyCode(pendingEmail, codigo, pendingRemember);
-      verifyForm.reset();
-      closeModal();
-      window.location.href = window.ClinicAppAuth.pageForUser(user);
-    } catch (err) {
-      showError(verifyError, (err && err.message) || 'No se pudo verificar el código.');
-    } finally {
-      setFormLoading(verifyForm, false);
-    }
-  });
-
-  resendCodeBtn.addEventListener('click', async () => {
-    verifyError.hidden = true;
-    resendCodeBtn.disabled = true;
-    try {
-      await window.ClinicAppAuth.resendCode(pendingEmail);
-      showError(verifyError, 'Código reenviado. Revisa tu correo.');
-    } catch (err) {
-      showError(verifyError, (err && err.message) || 'No se pudo reenviar el código.');
-    } finally {
-      setTimeout(() => { resendCodeBtn.disabled = false; }, 3000);
     }
   });
 

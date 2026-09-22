@@ -13,13 +13,4 @@ const authLimiter = rateLimit({
   message: jsonMessage('Demasiados intentos. Espera unos minutos e intenta de nuevo.'),
 });
 
-// Reenvio de codigo: estricto.
-const resendLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000,
-  max: 3,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: jsonMessage('Ya solicitaste varios codigos. Espera antes de pedir otro.'),
-});
-
-module.exports = { authLimiter, resendLimiter };
+module.exports = { authLimiter };

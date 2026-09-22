@@ -4,7 +4,7 @@ Fichas clínicas digitales para las prácticas de Podología y Cosmetología de 
 
 - **Frontend:** HTML/CSS/JS estático (raíz del repo).
 - **Backend:** Node.js + Express + MySQL (`server/`), servido junto al frontend.
-- **Infra local:** Docker Compose (MySQL 8 + Mailhog + API).
+- **Infra local:** Docker Compose (MySQL 8 + API).
 
 ## Requisitos
 
@@ -17,10 +17,10 @@ Fichas clínicas digitales para las prácticas de Podología y Cosmetología de 
 cp .env.example .env
 #   edita .env y cambia JWT_SECRET por una cadena larga y aleatoria
 
-# 2. Levantar todo (MySQL + Mailhog + API)
+# 2. Levantar todo (MySQL + API)
 docker compose up --build
 
-# 3. (una sola vez) crear usuarios iniciales ya verificados
+# 3. (una sola vez) crear usuarios iniciales
 docker compose exec api npm run seed
 ```
 
@@ -30,7 +30,6 @@ Servicios:
 |---|---|
 | http://localhost:3000 | La app (frontend + API) |
 | http://localhost:3000/api/health | Estado del backend |
-| http://localhost:8025 | Mailhog — aquí llegan los correos con el código de verificación |
 | http://localhost:8080 | Adminer — interfaz web para ver/editar la base de datos |
 | localhost:3306 | MySQL (user/pass/base según `.env`) |
 
@@ -42,13 +41,8 @@ Las migraciones se ejecutan solas al arrancar el contenedor `api`
 
 ## Registro de usuarios reales
 
-1. En la app: **Crear cuenta** con un correo `@correoaiep.cl`.
-2. El backend envía un **código de 6 dígitos** a ese correo.
-   - En local, ábrelo en **Mailhog** (http://localhost:8025).
-3. Ingresa el código en el modal → la cuenta queda activa y se inicia sesión.
-
-El código vence a los `CODE_TTL_MINUTES` minutos y se bloquea tras
-`CODE_MAX_ATTEMPTS` intentos fallidos (configurables en `.env`).
+En la app: **Crear cuenta** con un correo `@correoaiep.cl`. La cuenta queda
+activa de inmediato y se inicia sesión sin pasos adicionales.
 
 ### Usuarios de la semilla (`npm run seed`)
 
@@ -66,9 +60,7 @@ Base `/api`. Autenticación con `Authorization: Bearer <token>` (JWT).
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| POST | `/api/auth/register` | Crea cuenta pendiente y envía el código |
-| POST | `/api/auth/verify` | Confirma el código → devuelve token |
-| POST | `/api/auth/resend` | Reenvía el código |
+| POST | `/api/auth/register` | Crea cuenta activa → devuelve token |
 | POST | `/api/auth/login` | Inicia sesión → devuelve token |
 | GET | `/api/auth/me` | Usuario del token |
 | POST | `/api/fichas` | Registra una ficha |
@@ -90,8 +82,3 @@ El paciente se guarda además en la tabla `pacientes` (upsert por RUT).
 - Tras cambiar código del backend (`server/src`): `docker compose restart api`.
 - Correr el backend fuera de Docker: define `DB_HOST=localhost` en `.env`,
   `cd server && npm install && npm run migrate && npm run dev`.
-
-## Producción (correo real)
-
-Cambiar en `.env` las variables `SMTP_*` por las de un relay real (p. ej. Google
-Workspace de AIEP con *app password*). No requiere cambios de código.

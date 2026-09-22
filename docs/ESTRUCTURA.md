@@ -22,7 +22,7 @@ consumen la API en `/api`.
 ```
 ClinicApp/
 │
-├── index.html                     # Landing + login/registro (modal con código)
+├── index.html                     # Landing + login/registro (modal)
 ├── ficha-podologia.html           # Formulario de ficha clínica de podología
 ├── ficha-cosmetologia.html        # Formulario de ficha clínica de cosmetología
 │
@@ -33,7 +33,7 @@ ClinicApp/
 ├── js/
 │   ├── api.js                     # Cliente HTTP: token/usuario en storage, fetch a /api  → window.ClinicAppApi
 │   ├── auth.js                    # Sesión y control de acceso por especialidad          → window.ClinicAppAuth
-│   ├── main.js                    # Lógica de la landing: header, registro, verificación de código
+│   ├── main.js                    # Lógica de la landing: header, login/registro
 │   ├── ficha-common.js            # Utilidades compartidas por las fichas (formToObject, leerFirmas, hoyISO)  → window.ClinicAppFicha
 │   ├── ficha-podologia.js         # Comportamiento de la ficha de podología (scroll-spy, envío)
 │   └── ficha-cosmetologia.js      # Comportamiento de la ficha de cosmetología
@@ -45,43 +45,42 @@ ClinicApp/
 │   └── 4-morfologia-antepie.png   # Láminas de referencia usadas en la ficha de podología
 │
 ├── server/                        # ── BACKEND ──
-│   ├── package.json               # Deps (express, mysql2, jsonwebtoken, nodemailer, zod…) y scripts start/dev/migrate/seed
+│   ├── package.json               # Deps (express, mysql2, jsonwebtoken, zod…) y scripts start/dev/migrate/seed
 │   ├── package-lock.json
 │   ├── Dockerfile                 # Imagen de la API (build context = raíz del repo)
 │   ├── node_modules/              # (ignorado)
 │   │
 │   ├── db/
 │   │   ├── migrate.js             # Runner de migraciones (aplica los .sql pendientes vía tabla _migrations)
-│   │   ├── seed.js                # Crea usuarios iniciales ya verificados (idempotente)
+│   │   ├── seed.js                # Crea usuarios iniciales (idempotente)
 │   │   └── migrations/
-│   │       └── 001_init.sql       # Esquema: usuarios, verificacion_codigos, pacientes, fichas
+│   │       ├── 001_init.sql       # Esquema: usuarios, verificacion_codigos, pacientes, fichas
+│   │       └── 002_drop_verificacion.sql  # Elimina verificacion_codigos; usuarios.estado activo por defecto
 │   │
 │   ├── public/                    # Punto de montaje del frontend en Docker (archivos vacíos en local → ver notas)
 │   │
 │   └── src/
 │       ├── index.js               # Bootstrap de Express: middlewares, montaje de rutas, estáticos, listen
-│       ├── config.js              # Lee .env de la raíz y expone config tipada (db, jwt, smtp, auth…)
+│       ├── config.js              # Lee .env de la raíz y expone config tipada (db, jwt, auth…)
 │       ├── db.js                  # Pool de conexiones MySQL + helper query()
-│       ├── mailer.js              # Envío del correo con el código de verificación (nodemailer)
 │       │
 │       ├── routes/
-│       │   ├── auth.routes.js     # POST /register /verify /resend /login · GET /me
+│       │   ├── auth.routes.js     # POST /register /login · GET /me
 │       │   └── fichas.routes.js   # POST / · GET / · GET /:id · PUT /:id   (todas con requireAuth)
 │       │
 │       ├── controllers/
-│       │   ├── auth.controller.js     # Registro con código por correo, verificación, login, me
+│       │   ├── auth.controller.js     # Registro (cuenta activa de inmediato), login, me
 │       │   └── fichas.controller.js   # Crear / listar (con filtros) / detalle / actualizar fichas
 │       │
 │       ├── repositories/          # Acceso a datos (SQL) — una por tabla/agregado
 │       │   ├── usuarios.repo.js
-│       │   ├── codigos.repo.js    # Códigos de verificación (hash, TTL, intentos)
 │       │   ├── pacientes.repo.js  # Upsert de paciente por RUT
 │       │   └── fichas.repo.js     # Columnas indexadas + datos/firmas en JSON
 │       │
 │       ├── middleware/
 │       │   ├── auth.js            # requireAuth: valida el JWT Bearer
 │       │   ├── error.js           # notFound + errorHandler centralizado
-│       │   └── rateLimit.js       # authLimiter / resendLimiter
+│       │   └── rateLimit.js       # authLimiter
 │       │
 │       ├── validation/
 │       │   └── schemas.js         # Esquemas Zod de los payloads (auth y fichas)
@@ -89,10 +88,10 @@ ClinicApp/
 │       └── lib/
 │           ├── ApiError.js        # Error HTTP con código y status
 │           ├── asyncHandler.js    # Envuelve controllers async → next(err)
-│           ├── tokens.js          # signAccessToken, generarCodigo, hashCodigo
+│           ├── tokens.js          # signAccessToken
 │           └── rut.js             # normalizarRut (formato chileno, sin validar DV)
 │
-├── docker-compose.yml             # db (MySQL 8) · mailhog · adminer · api
+├── docker-compose.yml             # db (MySQL 8) · adminer · api
 ├── .env                           # Variables reales (ignorado por git)
 ├── .env.example                   # Plantilla de configuración
 ├── .dockerignore
@@ -110,7 +109,7 @@ ClinicApp/
 HTTP → index.js → routes/ → middleware (auth, rateLimit, validation)
      → controllers/ (orquesta, arma la respuesta)
      → repositories/ (SQL) → db.js (pool MySQL)
-     → lib/ y mailer.js como apoyo transversal
+     → lib/ como apoyo transversal
 ```
 
 - **routes/**: definen las URL y encadenan middlewares. No tienen lógica.
@@ -126,9 +125,7 @@ HTTP → index.js → routes/ → middleware (auth, rateLimit, validation)
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| POST | `/api/auth/register` | Crea cuenta pendiente y envía el código |
-| POST | `/api/auth/verify` | Confirma el código → devuelve token |
-| POST | `/api/auth/resend` | Reenvía el código |
+| POST | `/api/auth/register` | Crea cuenta activa → devuelve token |
 | POST | `/api/auth/login` | Inicia sesión → devuelve token |
 | GET | `/api/auth/me` | Usuario del token |
 | POST | `/api/fichas` | Registra una ficha |
@@ -139,12 +136,11 @@ HTTP → index.js → routes/ → middleware (auth, rateLimit, validation)
 
 ---
 
-## Modelo de datos (`server/db/migrations/001_init.sql`)
+## Modelo de datos (`server/db/migrations/`)
 
 | Tabla | Rol |
 |---|---|
-| `usuarios` | Cuentas; `estado` pendiente/activo/suspendido, `rol` y `especialidad` |
-| `verificacion_codigos` | Código de 6 dígitos hasheado, con TTL e intentos |
+| `usuarios` | Cuentas; `estado` activo/suspendido, `rol` y `especialidad` |
 | `pacientes` | Upsert por `rut` único |
 | `fichas` | Columnas indexadas (`paciente_rut`, `paciente_nombre`, `especialidad`, `fecha_atencion`, `profesional_id`, `estado`) + `datos` JSON (formulario completo) + `firmas` JSON (PNG dataURL) |
 
@@ -156,7 +152,6 @@ HTTP → index.js → routes/ → middleware (auth, rateLimit, validation)
 |---|---|---|
 | `api` | 3000 | App completa (frontend + API); monta la raíz como volumen para recarga |
 | `db` | 3306 | MySQL 8; datos persistentes en el volumen `db_data` |
-| `mailhog` | 8025 (web) / 1025 (SMTP) | Captura los correos con el código de verificación |
 | `adminer` | 8080 | Interfaz web para inspeccionar la base de datos |
 
 Migraciones y arranque: el contenedor `api` ejecuta `npm run migrate && npm start`.

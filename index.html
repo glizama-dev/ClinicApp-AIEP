@@ -343,26 +343,6 @@
         <p class="auth-form__error" id="registerError" hidden>Debes registrarte con tu correo institucional @correoaiep.cl</p>
       </form>
 
-      <!-- Verificación por código -->
-      <form class="auth-form" id="verifyForm" hidden>
-        <h3>Confirma tu correo</h3>
-        <p class="auth-form__subtitle">
-          Enviamos un código de 6 dígitos a <strong id="verifyEmailLabel">tu correo institucional</strong>.
-          Ingrésalo para activar tu cuenta.
-        </p>
-
-        <div class="form-group">
-          <label for="verifyCode">Código de verificación</label>
-          <input type="text" id="verifyCode" name="codigo" inputmode="numeric" autocomplete="one-time-code"
-                 maxlength="6" pattern="\d{6}" placeholder="123456" required>
-        </div>
-
-        <button type="submit" class="btn btn--primary btn--block">Verificar y entrar</button>
-        <p class="auth-form__error" id="verifyError" hidden></p>
-        <p class="auth-form__hint">
-          ¿No te llegó? <button type="button" class="link-small" id="resendCodeBtn">Reenviar código</button>
-        </p>
-      </form>
     </div>
   </div>
 

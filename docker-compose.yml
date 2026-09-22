@@ -19,13 +19,6 @@ services:
       timeout: 5s
       retries: 20
 
-  mailhog:
-    image: mailhog/mailhog:latest
-    restart: unless-stopped
-    ports:
-      - "1025:1025"   # SMTP
-      - "8025:8025"   # interfaz web
-
   adminer:
     image: adminer:latest
     restart: unless-stopped
@@ -52,8 +45,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      mailhog:
-        condition: service_started
     volumes:
       - ./server:/app
       - /app/node_modules

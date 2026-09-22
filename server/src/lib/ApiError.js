@@ -6,7 +6,7 @@
 class ApiError extends Error {
   /**
    * @param {number} status  codigo HTTP
-   * @param {string} code    codigo simbolico (ej. 'EMAIL_NO_VERIFICADO')
+   * @param {string} code    codigo simbolico (ej. 'CUENTA_SUSPENDIDA')
    * @param {string} message mensaje legible
    * @param {any} [details]
    */

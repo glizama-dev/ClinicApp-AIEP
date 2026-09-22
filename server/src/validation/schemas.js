@@ -2,6 +2,7 @@
 
 const { z } = require('zod');
 const config = require('../config');
+const { esRutValido } = require('../lib/rut');
 
 const email = z
   .string()
@@ -26,20 +27,20 @@ const registerSchema = z.object({
   password: z.string().min(8, 'La contrasena debe tener al menos 8 caracteres').max(200),
 });
 
-const verifySchema = z.object({
-  email: emailInstitucional,
-  codigo: z.string().trim().regex(/^\d{6}$/, 'El codigo debe tener 6 digitos'),
-});
-
-const resendSchema = z.object({ email: emailInstitucional });
-
 const loginSchema = z.object({
   email,
   password: z.string().min(1, 'Ingresa tu contrasena'),
 });
 
+const rut = z
+  .string()
+  .trim()
+  .toUpperCase()
+  .regex(/^\d{1,8}-[0-9K]$/, 'RUT invalido. Formato: 12345678-9 (sin puntos)')
+  .refine(esRutValido, 'El digito verificador del RUT no es correcto');
+
 const pacienteSchema = z.object({
-  rut: z.string().trim().min(2, 'RUT invalido').max(15),
+  rut,
   nombre: z.string().trim().min(2, 'Nombre del paciente requerido').max(150),
   fechaNacimiento: fecha.nullish(),
   telefono: z.string().trim().max(30).nullish(),
@@ -74,8 +75,6 @@ const fichaListQuerySchema = z.object({
 
 module.exports = {
   registerSchema,
-  verifySchema,
-  resendSchema,
   loginSchema,
   fichaCreateSchema,
   fichaUpdateSchema,

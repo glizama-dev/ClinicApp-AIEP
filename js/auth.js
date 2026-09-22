@@ -77,37 +77,19 @@
     return data.usuario;
   }
 
-  async function register(payload) {
-    return api.apiFetch('/api/auth/register', {
+  async function register(payload, remember) {
+    var data = await api.apiFetch('/api/auth/register', {
       method: 'POST',
       auth: false,
       body: payload,
-    });
-  }
-
-  async function verifyCode(email, codigo, remember) {
-    var data = await api.apiFetch('/api/auth/verify', {
-      method: 'POST',
-      auth: false,
-      body: { email: email, codigo: codigo },
     });
     api.saveAuth(data.token, data.usuario, !!remember);
     return data.usuario;
   }
 
-  async function resendCode(email) {
-    return api.apiFetch('/api/auth/resend', {
-      method: 'POST',
-      auth: false,
-      body: { email: email },
-    });
-  }
-
   window.ClinicAppAuth = {
     login: login,
     register: register,
-    verifyCode: verifyCode,
-    resendCode: resendCode,
     getSession: getSession,
     logout: logout,
     requireSession: requireSession,

@@ -1,6 +1,5 @@
 'use strict';
 
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 
@@ -16,14 +15,4 @@ function signAccessToken(usuario) {
   );
 }
 
-/** Genera un codigo numerico de 6 digitos (como string, con ceros a la izquierda). */
-function generarCodigo() {
-  return String(crypto.randomInt(0, 1_000_000)).padStart(6, '0');
-}
-
-/** Hash estable (no reversible) para guardar el codigo de verificacion. */
-function hashCodigo(codigo) {
-  return crypto.createHash('sha256').update(String(codigo)).digest('hex');
-}
-
-module.exports = { signAccessToken, generarCodigo, hashCodigo };
+module.exports = { signAccessToken };

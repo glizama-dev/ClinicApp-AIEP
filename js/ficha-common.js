@@ -57,5 +57,35 @@
     return `${d.getFullYear()}-${mm}-${dd}`;
   }
 
-  window.ClinicAppFicha = { formToObject, leerFirmas, hoyISO };
+  const RUT_REGEX = /^\d{1,8}-[0-9K]$/;
+
+  function calcularDigitoVerificador(cuerpo) {
+    let suma = 0;
+    let multiplicador = 2;
+    for (let i = cuerpo.length - 1; i >= 0; i--) {
+      suma += Number(cuerpo[i]) * multiplicador;
+      multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
+    }
+    const resto = 11 - (suma % 11);
+    if (resto === 11) return '0';
+    if (resto === 10) return 'K';
+    return String(resto);
+  }
+
+  /**
+   * Valida formato estricto "12345678-9" (sin puntos, guion obligatorio) y
+   * que el digito verificador sea correcto.
+   * @param {string} rut
+   * @returns {boolean}
+   */
+  function esRutValido(rut) {
+    const limpio = String(rut || '').trim().toUpperCase();
+    const match = RUT_REGEX.exec(limpio);
+    if (!match) return false;
+    const cuerpo = limpio.slice(0, -2);
+    const dv = limpio.slice(-1);
+    return dv === calcularDigitoVerificador(cuerpo);
+  }
+
+  window.ClinicAppFicha = { formToObject, leerFirmas, hoyISO, esRutValido };
 })();
