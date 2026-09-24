@@ -61,9 +61,11 @@ async function crear(req, res) {
 
 async function listar(req, res) {
   const q = fichaListQuerySchema.parse(req.query);
+  const puedeElegirEspecialidad = req.user.rol === 'admin' || req.user.especialidad === 'ambas';
+
   const filtros = {
     rut: q.rut ? normalizarRut(q.rut) : undefined,
-    especialidad: q.especialidad,
+    especialidad: puedeElegirEspecialidad ? q.especialidad : req.user.especialidad,
     desde: q.desde,
     hasta: q.hasta,
     page: q.page,

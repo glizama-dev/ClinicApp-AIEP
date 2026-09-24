@@ -24,6 +24,7 @@
         <h1>Ficha Clínica Cosmetológica</h1>
       </div>
       <div class="ficha-header__actions">
+        <a href="historial.html" class="btn btn--outline">Historial</a>
         <button type="button" class="btn btn--outline" id="printFichaBtn">Imprimir</button>
         <button type="button" class="btn btn--ghost" id="logoutBtn">Cerrar sesión</button>
       </div>
@@ -63,10 +64,10 @@
           <div class="table-wrap">
             <table class="plain-table">
               <tbody>
-                <tr><th>Fecha</th><td><input type="date" name="consentFecha"></td></tr>
-                <tr><th>Lugar de la actividad</th><td><input type="text" name="consentLugar" placeholder="Ej. Clínica cosmetológica AIEP"></td></tr>
+                <tr><th>Fecha</th><td><input type="date" id="consentFecha" name="consentFecha" required></td></tr>
+                <tr><th>Lugar de la actividad</th><td><input type="text" name="consentLugar" placeholder="Ej. Clínica cosmetológica AIEP" required></td></tr>
                 <tr><th>Docente a cargo de la actividad</th><td><input type="text" name="consentDocente" placeholder="Nombre del/la docente"></td></tr>
-                <tr><th>Estudiante que realiza la atención</th><td><input type="text" name="consentEstudiante" placeholder="Nombre del/la estudiante"></td></tr>
+                <tr><th>Estudiante que realiza la atención</th><td><input type="text" name="consentEstudiante" placeholder="Nombre del/la estudiante" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -84,11 +85,11 @@
           <div class="form-row">
             <div class="form-group">
               <label for="consentNombre">Yo (nombre completo del paciente)</label>
-              <input type="text" id="consentNombre" name="consentNombre" placeholder="Nombre completo">
+              <input type="text" id="consentNombre" name="consentNombre" placeholder="Nombre completo" required>
             </div>
             <div class="form-group">
               <label for="consentRut">Rut</label>
-              <input type="text" id="consentRut" name="consentRut" placeholder="12345678-9" pattern="\d{1,8}-[0-9Kk]" maxlength="10" title="Formato: 12345678-9, sin puntos">
+              <input type="text" id="consentRut" name="consentRut" placeholder="12345678-9" pattern="\d{1,8}-[0-9Kk]" maxlength="10" title="Formato: 12345678-9, sin puntos" required>
             </div>
           </div>
 
@@ -97,8 +98,8 @@
           </div>
 
           <div class="yn-options" role="radiogroup" aria-label="Decisión de participación">
-            <label class="radio-pill"><input type="radio" name="consentDecision" value="acepto"><span>Acepto participar en la atención cosmetológica descrita</span></label>
-            <label class="radio-pill"><input type="radio" name="consentDecision" value="rechazo"><span>Rechazo participar en la atención cosmetológica descrita</span></label>
+            <label class="radio-pill"><input type="radio" name="consentDecision" value="acepto" required><span>Acepto participar en la atención cosmetológica descrita</span></label>
+            <label class="radio-pill"><input type="radio" name="consentDecision" value="rechazo" required><span>Rechazo participar en la atención cosmetológica descrita</span></label>
           </div>
 
           <details class="signature-panel">
@@ -144,11 +145,11 @@
           <div class="form-row">
             <div class="form-group">
               <label for="datNombre">Nombre completo</label>
-              <input type="text" id="datNombre" name="datNombre" placeholder="Nombre completo">
+              <input type="text" id="datNombre" name="datNombre" placeholder="Nombre completo" required>
             </div>
             <div class="form-group">
               <label for="datRut">RUT / Identificación</label>
-              <input type="text" id="datRut" name="datRut" placeholder="12345678-9" pattern="\d{1,8}-[0-9Kk]" maxlength="10" title="Formato: 12345678-9, sin puntos">
+              <input type="text" id="datRut" name="datRut" placeholder="12345678-9" pattern="\d{1,8}-[0-9Kk]" maxlength="10" title="Formato: 12345678-9, sin puntos" required>
             </div>
           </div>
 
@@ -159,7 +160,7 @@
             </div>
             <div class="form-group">
               <label for="datFecha">Fecha</label>
-              <input type="date" id="datFecha" name="datFecha">
+              <input type="date" id="datFecha" name="datFecha" required>
             </div>
           </div>
 

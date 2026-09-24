@@ -65,6 +65,21 @@
     return usuario;
   }
 
+  /**
+   * Protege una pagina que no depende de una especialidad puntual (ej. historial).
+   * Redirige al login si no hay sesion valida.
+   * @returns {object|null} usuario
+   */
+  function requireLogin() {
+    var usuario = getSession();
+    if (!usuario || tokenExpirado()) {
+      logout();
+      window.location.href = 'index.html?login=1';
+      return null;
+    }
+    return usuario;
+  }
+
   /* ===== Llamadas a la API de autenticacion ===== */
 
   async function login(email, password, remember) {
@@ -93,6 +108,7 @@
     getSession: getSession,
     logout: logout,
     requireSession: requireSession,
+    requireLogin: requireLogin,
     pageForUser: pageForUser,
   };
 })();

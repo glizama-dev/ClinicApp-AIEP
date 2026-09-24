@@ -12,6 +12,17 @@
     });
   }
 
+  /* ===== Fecha de atencion: solo la fecha actual ===== */
+  const HOY = new Date().toISOString().slice(0, 10);
+  ['consentFecha', 'antFecha'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.min = HOY;
+      el.max = HOY;
+      el.value = HOY;
+    }
+  });
+
   /* ===== Sidebar scroll-spy ===== */
   const sections = document.querySelectorAll('.ficha-section');
   const sidebarLinks = document.querySelectorAll('.ficha-sidebar__link');
@@ -130,6 +141,19 @@
     fichaError.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  const CAMPOS_OBLIGATORIOS = [
+    { name: 'consentFecha', label: 'Fecha (Consentimiento informado)' },
+    { name: 'consentLugar', label: 'Lugar de la actividad' },
+    { name: 'consentEstudiante', label: 'Estudiante que realiza la atención' },
+    { name: 'consentNombre', label: 'Nombre del paciente (Consentimiento)' },
+    { name: 'consentRut', label: 'Rut del paciente (Consentimiento)' },
+    { name: 'antFecha', label: 'Fecha (Antecedentes personales)' },
+    { name: 'antNombre', label: 'Nombre (Antecedentes personales)' },
+    { name: 'antRut', label: 'Rut (Antecedentes personales)' },
+    { name: 'antNacimiento', label: 'Fecha de nacimiento' },
+    { name: 'antPrevision', label: 'Previsión' },
+  ];
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     success.hidden = true;
@@ -138,25 +162,45 @@
     const datos = ficha.formToObject(form);
     const firmas = ficha.leerFirmas(form);
 
-    const rut = String(datos.antRut || datos.consentRut || '').trim().toUpperCase();
-    const nombre = String(datos.antNombre || datos.consentNombre || '').trim();
-    if (!rut || !nombre) {
-      mostrarError('Completa al menos el RUT y el nombre del paciente en la sección Antecedentes.');
+    const faltantes = CAMPOS_OBLIGATORIOS
+      .filter((campo) => !String(datos[campo.name] || '').trim())
+      .map((campo) => campo.label);
+    if (!datos.consentDecision) {
+      faltantes.push('Decisión de participación (Consentimiento)');
+    }
+    if (faltantes.length) {
+      mostrarError('Completa los siguientes campos obligatorios: ' + faltantes.join(', ') + '.');
       return;
     }
-    if (!ficha.esRutValido(rut)) {
-      mostrarError('El RUT del paciente no es válido. Usa el formato 12345678-9, sin puntos.');
+
+    if (String(datos.consentFecha).trim() !== HOY || String(datos.antFecha).trim() !== HOY) {
+      mostrarError('La fecha de atención debe ser la fecha actual (' + HOY + ').');
+      return;
+    }
+
+    const consentRut = String(datos.consentRut).trim().toUpperCase();
+    const antRut = String(datos.antRut).trim().toUpperCase();
+    if (!ficha.esRutValido(consentRut)) {
+      mostrarError('El RUT del paciente en Consentimiento informado no es válido. Usa el formato 12345678-9, sin puntos.');
+      return;
+    }
+    if (!ficha.esRutValido(antRut)) {
+      mostrarError('El RUT del paciente en Antecedentes personales no es válido. Usa el formato 12345678-9, sin puntos.');
+      return;
+    }
+
+    if (!firmas || !firmas.paciente || !firmas.estudiante) {
+      mostrarError('Debes registrar la firma del paciente y del estudiante antes de guardar (la firma del docente es opcional).');
       return;
     }
 
     const payload = {
       especialidad: 'podologia',
-      fechaAtencion:
-        String(datos.antFecha || datos.consentFecha || '').trim() || ficha.hoyISO(),
+      fechaAtencion: String(datos.antFecha).trim(),
       paciente: {
-        rut: rut,
-        nombre: nombre,
-        fechaNacimiento: String(datos.antNacimiento || '').trim() || null,
+        rut: antRut,
+        nombre: String(datos.antNombre).trim(),
+        fechaNacimiento: String(datos.antNacimiento).trim(),
         telefono: String(datos.antTelefono || '').trim() || null,
       },
       datos: datos,
@@ -167,11 +211,11 @@
     if (submitBtn) submitBtn.disabled = true;
 
     try {
-      const res = await window.ClinicAppApi.apiFetch('/api/fichas', {
+      await window.ClinicAppApi.apiFetch('/api/fichas', {
         method: 'POST',
         body: payload,
       });
-      success.textContent = `Ficha registrada correctamente (N° ${res.id}).`;
+      success.textContent = 'Ficha guardada con éxito';
       success.hidden = false;
       success.scrollIntoView({ behavior: 'smooth', block: 'center' });
       form.reset();

@@ -33,9 +33,14 @@ async function buscarPorEmail(email) {
   return rows[0] || null;
 }
 
+async function actualizarPassword(id, passwordHash) {
+  await query('UPDATE usuarios SET password_hash = :passwordHash WHERE id = :id', { id, passwordHash });
+}
+
 module.exports = {
   crear,
   buscarPorId,
   buscarPorEmail,
   buscarPorEmailConHash,
+  actualizarPassword,
 };

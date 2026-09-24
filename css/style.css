@@ -432,6 +432,7 @@ img { max-width: 100%; display: block; }
 .contact-form { display: flex; flex-direction: column; gap: 18px; background: #fff; padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group[hidden] { display: none; }
 .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--color-text); }
 .form-hint { font-size: 0.78rem; color: var(--color-text-muted); }
 .form-group input, .form-group textarea, .form-group select {
@@ -494,6 +495,17 @@ img { max-width: 100%; display: block; }
   transition: border-color 0.2s ease;
 }
 .modal:has(#registerForm:not([hidden])) { border-top-color: var(--color-accent); }
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--color-bg-soft);
+}
+.auth-page__card { position: static; margin: 0 auto; }
+.auth-page__logo { display: flex; justify-content: center; margin-bottom: 24px; font-size: 1.1rem; }
 
 .modal__close {
   position: absolute;

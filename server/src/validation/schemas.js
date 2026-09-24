@@ -32,6 +32,15 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Ingresa tu contrasena'),
 });
 
+const forgotPasswordSchema = z.object({
+  email,
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, 'Token invalido'),
+  password: z.string().min(8, 'La contrasena debe tener al menos 8 caracteres').max(200),
+});
+
 const rut = z
   .string()
   .trim()
@@ -76,6 +85,8 @@ const fichaListQuerySchema = z.object({
 module.exports = {
   registerSchema,
   loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
   fichaCreateSchema,
   fichaUpdateSchema,
   fichaListQuerySchema,

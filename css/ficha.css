@@ -298,6 +298,42 @@ body { background: var(--color-bg-soft); }
   padding: 8px 4px;
 }
 
+/* ============ Historial ============ */
+.historial-main { padding-top: 28px; padding-bottom: 64px; }
+
+.historial-filter-form .form-row { flex-wrap: wrap; }
+.historial-filter-form .form-group { min-width: 180px; flex: 1; }
+
+.historial-filter-actions { display: flex; gap: 12px; margin-top: 18px; }
+
+.historial-table th:last-child, .historial-table td:last-child { width: 90px; text-align: right; }
+
+.historial-empty {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  padding: 18px 4px;
+  text-align: center;
+}
+
+.historial-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.modal--wide { max-width: 720px; text-align: left; }
+.modal--wide h3 { font-size: 1.25rem; margin-bottom: 18px; }
+
+.detalle-content { display: flex; flex-direction: column; gap: 18px; }
+.detalle-meta p { font-size: 0.92rem; margin-bottom: 4px; }
+.detalle-table th { width: 220px; }
+.detalle-subtitulo { font-size: 1rem; margin-top: 4px; }
+.detalle-firma-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
 /* ============ Responsive ============ */
 @media (max-width: 960px) {
   .ficha-layout { grid-template-columns: 1fr; }
@@ -338,6 +374,9 @@ body { background: var(--color-bg-soft); }
   .plain-table tr { margin-bottom: 10px; }
   .plain-table th { border-bottom: none; padding-bottom: 6px; }
   .plain-table td { border-top: none; padding-top: 0; }
+
+  .historial-filter-form .form-group { min-width: 0; }
+  .modal--wide { max-width: 100%; }
 }
 
 /* ============ Impresión ============ */

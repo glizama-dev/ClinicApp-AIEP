@@ -51,6 +51,8 @@ services:
       - ./index.html:/app/public/index.html
       - ./ficha-podologia.html:/app/public/ficha-podologia.html
       - ./ficha-cosmetologia.html:/app/public/ficha-cosmetologia.html
+      - ./historial.html:/app/public/historial.html
+      - ./reset-password.html:/app/public/reset-password.html
       - ./css:/app/public/css
       - ./js:/app/public/js
       - ./img:/app/public/img

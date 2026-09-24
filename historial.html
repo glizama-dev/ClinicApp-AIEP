@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de Fichas | ClinicApp</title>
+  <meta name="description" content="Historial y búsqueda de fichas clínicas de podología y cosmetología en ClinicApp.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ficha.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="ficha-header">
+    <div class="container ficha-header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        ClinicApp
+      </a>
+      <div class="ficha-header__title">
+        <span class="eyebrow" id="historialEyebrow">Historial</span>
+        <h1>Historial de fichas</h1>
+      </div>
+      <div class="ficha-header__actions">
+        <a href="index.html" class="btn btn--outline" id="backToFichaBtn">Volver a la ficha</a>
+        <button type="button" class="btn btn--ghost" id="logoutBtn">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container historial-main">
+
+    <!-- Filtros -->
+    <section class="ficha-section">
+      <div class="ficha-section__head">
+        <span class="eyebrow">Buscar</span>
+        <h2>Filtrar fichas</h2>
+      </div>
+
+      <form id="historialFilterForm" class="historial-filter-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="filtroRut">RUT del paciente</label>
+            <input type="text" id="filtroRut" name="rut" placeholder="12345678-9" maxlength="10">
+          </div>
+          <div class="form-group" id="filtroEspecialidadGroup" hidden>
+            <label for="filtroEspecialidad">Especialidad</label>
+            <select id="filtroEspecialidad" name="especialidad">
+              <option value="">Todas</option>
+              <option value="podologia">Podología</option>
+              <option value="cosmetologia">Cosmetología</option>
+            </select>
+          </div>
+        </div>
+        <div class="historial-filter-actions">
+          <button type="submit" class="btn btn--primary">Buscar</button>
+          <button type="button" class="btn btn--ghost" id="limpiarFiltrosBtn">Limpiar filtros</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Resultados -->
+    <section class="ficha-section">
+      <div class="ficha-section__head">
+        <span class="eyebrow" id="resultCount">0 fichas</span>
+        <h2>Resultados</h2>
+      </div>
+
+      <p class="form-error" id="historialError" hidden></p>
+
+      <div class="table-wrap">
+        <table class="eval-table historial-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Paciente</th>
+              <th>RUT</th>
+              <th>Especialidad</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="historialTbody"></tbody>
+        </table>
+      </div>
+
+      <p class="historial-empty" id="historialEmpty" hidden>No se encontraron fichas con estos filtros.</p>
+
+      <div class="historial-pagination" id="historialPagination" hidden>
+        <button type="button" class="btn btn--outline btn--sm" id="prevPageBtn">Anterior</button>
+        <span id="pageInfo">Página 1 de 1</span>
+        <button type="button" class="btn btn--outline btn--sm" id="nextPageBtn">Siguiente</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Detalle de ficha -->
+  <div class="modal-overlay" id="detalleOverlay">
+    <div class="modal modal--wide" role="dialog" aria-modal="true" aria-labelledby="detalleTitle">
+      <button class="modal__close" id="closeDetalleBtn" aria-label="Cerrar">&times;</button>
+      <h3 id="detalleTitle">Detalle de la ficha</h3>
+      <div id="detalleContent" class="detalle-content"></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/historial.js"></script>
+</body>
+</html>

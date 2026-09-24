@@ -63,10 +63,12 @@
   ].filter(Boolean);
   const closeBtn = document.getElementById('closeLoginBtn');
 
+  const modalTabs = document.querySelector('.modal__tabs');
   const tabLogin = document.getElementById('tabLogin');
   const tabRegister = document.getElementById('tabRegister');
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
+  const forgotForm = document.getElementById('forgotForm');
 
   function openModal(tab) {
     overlay.classList.add('is-open');
@@ -82,10 +84,21 @@
   function switchTab(tab) {
     const isLogin = tab === 'login';
     const isRegister = tab === 'register';
+    modalTabs.hidden = false;
     tabLogin.classList.toggle('modal__tab--active', isLogin);
     tabRegister.classList.toggle('modal__tab--active', isRegister);
     loginForm.hidden = !isLogin;
     registerForm.hidden = !isRegister;
+    forgotForm.hidden = true;
+  }
+
+  function showForgotForm() {
+    modalTabs.hidden = true;
+    loginForm.hidden = true;
+    registerForm.hidden = true;
+    forgotForm.hidden = false;
+    forgotError.hidden = true;
+    forgotSuccess.hidden = true;
   }
 
   openBtns.forEach((btn) => btn.addEventListener('click', () => openModal('login')));
@@ -166,6 +179,49 @@
   if (new URLSearchParams(window.location.search).get('login') === '1') {
     openModal('login');
   }
+
+  /* ===== Forgot password form ===== */
+  const forgotError = document.getElementById('forgotError');
+  const forgotSuccess = document.getElementById('forgotSuccess');
+  const openForgotBtn = document.getElementById('openForgotBtn');
+  const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
+
+  openForgotBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showForgotForm();
+  });
+
+  backToLoginFromForgot.addEventListener('click', (e) => {
+    e.preventDefault();
+    switchTab('login');
+  });
+
+  forgotForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    forgotError.hidden = true;
+    forgotSuccess.hidden = true;
+
+    const email = document.getElementById('forgotEmail').value.trim();
+    if (!email) {
+      showError(forgotError, 'Ingresa tu correo institucional.');
+      return;
+    }
+
+    setFormLoading(forgotForm, true);
+    try {
+      await window.ClinicAppApi.apiFetch('/api/auth/forgot-password', {
+        method: 'POST',
+        auth: false,
+        body: { email },
+      });
+      forgotForm.reset();
+      forgotSuccess.hidden = false;
+    } catch (err) {
+      showError(forgotError, (err && err.message) || 'No se pudo procesar la solicitud.');
+    } finally {
+      setFormLoading(forgotForm, false);
+    }
+  });
 
   /* ===== Register form ===== */
   const registerError = document.getElementById('registerError');

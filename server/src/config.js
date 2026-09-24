@@ -45,6 +45,13 @@ const config = {
     allowedEmailDomain: optional('ALLOWED_EMAIL_DOMAIN', '@correoaiep.cl').toLowerCase(),
   },
 
+  mailer: {
+    gmailUser: optional('GMAIL_USER', ''),
+    gmailAppPassword: optional('GMAIL_APP_PASSWORD', ''),
+  },
+
+  appBaseUrl: optional('APP_BASE_URL', 'http://localhost:3000'),
+
   corsOrigin: optional('CORS_ORIGIN', 'http://localhost:3000'),
 
   // Carpeta del frontend estatico que sirve Express.

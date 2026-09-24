@@ -12,6 +12,17 @@
     });
   }
 
+  /* ===== Fecha de atencion: solo la fecha actual ===== */
+  const HOY = new Date().toISOString().slice(0, 10);
+  ['consentFecha', 'datFecha'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.min = HOY;
+      el.max = HOY;
+      el.value = HOY;
+    }
+  });
+
   /* ===== Sidebar scroll-spy ===== */
   const sections = document.querySelectorAll('.ficha-section');
   const sidebarLinks = document.querySelectorAll('.ficha-sidebar__link');
@@ -101,6 +112,17 @@
     fichaError.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  const CAMPOS_OBLIGATORIOS = [
+    { name: 'consentFecha', label: 'Fecha (Consentimiento informado)' },
+    { name: 'consentLugar', label: 'Lugar de la actividad' },
+    { name: 'consentEstudiante', label: 'Estudiante que realiza la atención' },
+    { name: 'consentNombre', label: 'Nombre del paciente (Consentimiento)' },
+    { name: 'consentRut', label: 'Rut del paciente (Consentimiento)' },
+    { name: 'datNombre', label: 'Nombre completo (Datos personales)' },
+    { name: 'datRut', label: 'Rut (Datos personales)' },
+    { name: 'datFecha', label: 'Fecha (Datos personales)' },
+  ];
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     success.hidden = true;
@@ -109,26 +131,50 @@
     const datos = ficha.formToObject(form);
     const firmas = ficha.leerFirmas(form);
 
-    const rut = String(datos.datRut || datos.consentRut || '').trim().toUpperCase();
-    const nombre = String(datos.datNombre || datos.consentNombre || '').trim();
-    if (!rut || !nombre) {
-      mostrarError('Completa al menos el RUT y el nombre del paciente en la sección Datos personales.');
-      return;
+    const faltantes = CAMPOS_OBLIGATORIOS
+      .filter((campo) => !String(datos[campo.name] || '').trim())
+      .map((campo) => campo.label);
+    if (!datos.consentDecision) {
+      faltantes.push('Decisión de participación (Consentimiento)');
     }
-    if (!ficha.esRutValido(rut)) {
-      mostrarError('El RUT del paciente no es válido. Usa el formato 12345678-9, sin puntos.');
+    const telefono = String(datos.datTelefono || '').trim();
+    const correo = String(datos.datCorreo || '').trim();
+    if (!telefono && !correo) {
+      faltantes.push('Teléfono o Correo electrónico (Datos personales)');
+    }
+    if (faltantes.length) {
+      mostrarError('Completa los siguientes campos obligatorios: ' + faltantes.join(', ') + '.');
       return;
     }
 
-    const correo = String(datos.datCorreo || '').trim();
+    if (String(datos.consentFecha).trim() !== HOY || String(datos.datFecha).trim() !== HOY) {
+      mostrarError('La fecha de atención debe ser la fecha actual (' + HOY + ').');
+      return;
+    }
+
+    const consentRut = String(datos.consentRut).trim().toUpperCase();
+    const datRut = String(datos.datRut).trim().toUpperCase();
+    if (!ficha.esRutValido(consentRut)) {
+      mostrarError('El RUT del paciente en Consentimiento informado no es válido. Usa el formato 12345678-9, sin puntos.');
+      return;
+    }
+    if (!ficha.esRutValido(datRut)) {
+      mostrarError('El RUT del paciente en Datos personales no es válido. Usa el formato 12345678-9, sin puntos.');
+      return;
+    }
+
+    if (!firmas || !firmas.paciente || !firmas.estudiante) {
+      mostrarError('Debes registrar la firma del paciente y del estudiante antes de guardar (la firma del docente es opcional).');
+      return;
+    }
+
     const payload = {
       especialidad: 'cosmetologia',
-      fechaAtencion:
-        String(datos.datFecha || datos.consentFecha || '').trim() || ficha.hoyISO(),
+      fechaAtencion: String(datos.datFecha).trim(),
       paciente: {
-        rut: rut,
-        nombre: nombre,
-        telefono: String(datos.datTelefono || '').trim() || null,
+        rut: datRut,
+        nombre: String(datos.datNombre).trim(),
+        telefono: telefono || null,
         email: correo || null,
       },
       datos: datos,
@@ -139,11 +185,11 @@
     if (submitBtn) submitBtn.disabled = true;
 
     try {
-      const res = await window.ClinicAppApi.apiFetch('/api/fichas', {
+      await window.ClinicAppApi.apiFetch('/api/fichas', {
         method: 'POST',
         body: payload,
       });
-      success.textContent = `Ficha registrada correctamente (N° ${res.id}).`;
+      success.textContent = 'Ficha guardada con éxito';
       success.hidden = false;
       success.scrollIntoView({ behavior: 'smooth', block: 'center' });
       form.reset();
