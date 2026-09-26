@@ -46,8 +46,9 @@ const config = {
   },
 
   mailer: {
-    gmailUser: optional('GMAIL_USER', ''),
-    gmailAppPassword: optional('GMAIL_APP_PASSWORD', ''),
+    brevoApiKey: optional('BREVO_API_KEY', ''),
+    fromEmail: optional('MAIL_FROM_EMAIL', ''),
+    fromName: optional('MAIL_FROM_NAME', 'ClinicApp'),
   },
 
   appBaseUrl: optional('APP_BASE_URL', 'http://localhost:3000'),
