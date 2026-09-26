@@ -63,6 +63,25 @@
   ].filter(Boolean);
   const closeBtn = document.getElementById('closeLoginBtn');
 
+  /* ===== Header segun estado de sesion ===== */
+  const sesionActiva = window.ClinicAppAuth.sesionValida();
+  if (sesionActiva) {
+    openBtns.forEach((btn) => {
+      btn.textContent = 'Mi panel';
+      btn.classList.remove('btn--ghost');
+      btn.classList.add('btn--primary');
+    });
+    openRegisterBtns.forEach((btn) => {
+      if (btn.id === 'openRegisterBtnHero') {
+        btn.textContent = 'Mi panel';
+      } else {
+        btn.textContent = 'Cerrar sesión';
+        btn.classList.remove('btn--primary');
+        btn.classList.add('btn--ghost');
+      }
+    });
+  }
+
   const modalTabs = document.querySelector('.modal__tabs');
   const tabLogin = document.getElementById('tabLogin');
   const tabRegister = document.getElementById('tabRegister');
@@ -101,10 +120,24 @@
     forgotSuccess.hidden = true;
   }
 
-  openBtns.forEach((btn) => btn.addEventListener('click', () => openModal('login')));
+  openBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (sesionActiva) { window.location.href = 'panel.html'; return; }
+      openModal('login');
+    });
+  });
   openRegisterBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
+      if (sesionActiva) {
+        if (btn.id === 'openRegisterBtnHero') {
+          window.location.href = 'panel.html';
+        } else {
+          window.ClinicAppAuth.logout();
+          window.location.reload();
+        }
+        return;
+      }
       openModal('register');
     });
   });

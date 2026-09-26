@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel | ClinicApp</title>
+  <meta name="description" content="Panel de inicio de ClinicApp: crea una nueva ficha clínica o consulta el historial de pacientes.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ficha.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="ficha-header">
+    <div class="container ficha-header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        ClinicApp
+      </a>
+      <div class="ficha-header__title">
+        <span class="eyebrow" id="panelEyebrow">Panel</span>
+        <h1 id="panelSaludo">Hola</h1>
+      </div>
+      <div class="ficha-header__actions">
+        <button type="button" class="btn btn--ghost" id="logoutBtn">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container panel-main">
+    <section class="ficha-section panel-card">
+      <div class="ficha-section__head">
+        <span class="eyebrow">Empezar</span>
+        <h2>Crear nueva ficha</h2>
+      </div>
+      <p class="ficha-hint">Selecciona la especialidad para comenzar una nueva atención.</p>
+      <div class="panel-actions" id="crearFichaActions"></div>
+    </section>
+
+    <section class="ficha-section panel-card">
+      <div class="ficha-section__head">
+        <span class="eyebrow">Consultar</span>
+        <h2>Historial de fichas</h2>
+      </div>
+      <p class="ficha-hint">Busca y revisa fichas ya registradas de tus pacientes.</p>
+      <div class="panel-actions">
+        <a href="historial.html" class="btn btn--outline btn--lg">Ir al historial</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/panel.js"></script>
+</body>
+</html>

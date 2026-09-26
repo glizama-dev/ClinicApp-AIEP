@@ -3,11 +3,6 @@
 
   var api = window.ClinicAppApi;
 
-  var PAGE_BY_SPECIALTY = {
-    podologia: 'ficha-podologia.html',
-    cosmetologia: 'ficha-cosmetologia.html',
-  };
-
   /* ===== Utilidades de sesion ===== */
 
   function getSession() {
@@ -36,13 +31,10 @@
     return usuario.especialidad === especialidad || usuario.especialidad === 'ambas';
   }
 
-  /** Pagina de ficha a la que redirigir tras iniciar sesion. */
+  /** Pagina a la que redirigir tras iniciar sesion o registrarse. */
   function pageForUser(usuario) {
     if (!usuario) return 'index.html';
-    if (usuario.especialidad === 'ambas' || usuario.rol === 'admin') {
-      return PAGE_BY_SPECIALTY.podologia;
-    }
-    return PAGE_BY_SPECIALTY[usuario.especialidad] || 'index.html';
+    return 'panel.html';
   }
 
   /**
@@ -80,6 +72,15 @@
     return usuario;
   }
 
+  /**
+   * Igual que requireLogin pero sin redirigir: para paginas publicas (ej. index.html)
+   * que solo necesitan saber si hay sesion vigente para adaptar su interfaz.
+   * @returns {boolean}
+   */
+  function sesionValida() {
+    return !!getSession() && !tokenExpirado();
+  }
+
   /* ===== Llamadas a la API de autenticacion ===== */
 
   async function login(email, password, remember) {
@@ -109,6 +110,7 @@
     logout: logout,
     requireSession: requireSession,
     requireLogin: requireLogin,
+    sesionValida: sesionValida,
     pageForUser: pageForUser,
   };
 })();

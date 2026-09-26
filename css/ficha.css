@@ -359,6 +359,9 @@ body { background: var(--color-bg-soft); }
 /* ============ Historial ============ */
 .historial-main { padding-top: 28px; padding-bottom: 64px; }
 
+.panel-main { padding-top: 28px; padding-bottom: 64px; display: flex; flex-direction: column; gap: 24px; max-width: 720px; margin: 0 auto; }
+.panel-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+
 .historial-filter-form .form-row { flex-wrap: wrap; }
 .historial-filter-form .form-group { min-width: 180px; flex: 1; }
 
