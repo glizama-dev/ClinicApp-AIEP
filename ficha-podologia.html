@@ -44,6 +44,7 @@
         <li><a href="#lesiones-ungueales" class="ficha-sidebar__link">6. Lesiones ungueales</a></li>
         <li><a href="#diagramas" class="ficha-sidebar__link">7. Diagramas y topografía</a></li>
         <li><a href="#tratamiento" class="ficha-sidebar__link">8. Tratamiento e indicaciones</a></li>
+        <li><a href="#registro-fotografico" class="ficha-sidebar__link">9. Registro fotográfico</a></li>
       </ul>
     </nav>
 
@@ -699,6 +700,20 @@
             <label for="podologoTratante">Nombre podólogo/a tratante</label>
             <input type="text" id="podologoTratante" name="podologoTratante">
           </div>
+        </section>
+
+        <!-- 9. Registro fotografico -->
+        <section class="ficha-section" id="registro-fotografico">
+          <div class="ficha-section__head">
+            <span class="eyebrow">Sección 9</span>
+            <h2>Registro fotográfico</h2>
+          </div>
+          <p class="ficha-hint">Agrega fotos para llevar un seguimiento visual del paciente en esta atención (se comprimen automáticamente antes de guardarse).</p>
+          <div class="foto-upload">
+            <label class="btn btn--outline" for="fotoInput">Agregar fotos</label>
+            <input type="file" id="fotoInput" accept="image/*" multiple hidden>
+          </div>
+          <div class="foto-grid" id="fotoGrid"></div>
         </section>
 
         <div class="ficha-actions">

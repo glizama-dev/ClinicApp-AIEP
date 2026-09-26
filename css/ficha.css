@@ -254,6 +254,64 @@ body { background: var(--color-bg-soft); }
 
 .btn--sm { padding: 7px 14px; font-size: 0.82rem; align-self: flex-start; }
 
+.foto-upload { margin-bottom: 18px; }
+
+.foto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+
+.foto-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  background: var(--color-bg-soft);
+}
+.foto-card__img { width: 100%; height: 140px; object-fit: cover; border-radius: var(--radius-sm); display: block; }
+.foto-card__desc { width: 100%; }
+.foto-card__remove {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(16, 35, 43, 0.65);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.foto-card__remove:hover { background: var(--color-danger); }
+
+.foto-grid--view .foto-card__img { cursor: zoom-in; }
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 18, 22, 0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: 32px;
+}
+.lightbox-overlay.is-open { display: flex; }
+.lightbox-overlay__img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--radius-sm); }
+.lightbox-overlay__close {
+  position: absolute;
+  top: 20px; right: 24px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.lightbox-overlay__close:hover { background: rgba(255, 255, 255, 0.3); }
+.foto-card__desc-view { font-size: 0.82rem; color: var(--color-text-muted); margin: 0; }
+
 /* ============ Diagramas (imágenes de referencia AIEP) ============ */
 .diagram-figure {
   margin: 0 0 20px;
@@ -328,10 +386,11 @@ body { background: var(--color-bg-soft); }
 .modal--wide { max-width: 720px; text-align: left; }
 .modal--wide h3 { font-size: 1.25rem; margin-bottom: 18px; }
 
-.detalle-content { display: flex; flex-direction: column; gap: 18px; }
+.detalle-content { display: flex; flex-direction: column; gap: 22px; }
 .detalle-meta p { font-size: 0.92rem; margin-bottom: 4px; }
-.detalle-table th { width: 220px; }
-.detalle-subtitulo { font-size: 1rem; margin-top: 4px; }
+.detalle-section + .detalle-section { border-top: 1px solid var(--color-border); padding-top: 18px; }
+.detalle-subtitulo { font-size: 1rem; margin: 0 0 10px; color: var(--color-primary); }
+.detalle-table th { width: 260px; }
 .detalle-firma-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
 /* ============ Responsive ============ */

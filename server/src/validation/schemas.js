@@ -56,6 +56,13 @@ const pacienteSchema = z.object({
   email: z.string().trim().toLowerCase().max(190).nullish(),
 });
 
+const fotoSchema = z.object({
+  dataUrl: z.string().min(1, 'Foto invalida'),
+  descripcion: z.string().trim().max(200).nullish(),
+});
+
+const fotos = z.array(fotoSchema).max(6, 'Maximo 6 fotos por ficha');
+
 const fichaCreateSchema = z.object({
   especialidad: z.enum(['podologia', 'cosmetologia']),
   fechaAtencion: fecha,
@@ -63,12 +70,14 @@ const fichaCreateSchema = z.object({
   paciente: pacienteSchema,
   datos: z.record(z.any()),
   firmas: z.record(z.string()).nullish(),
+  fotos: fotos.nullish(),
 });
 
 const fichaUpdateSchema = z
   .object({
     datos: z.record(z.any()).optional(),
     firmas: z.record(z.string()).nullable().optional(),
+    fotos: fotos.nullable().optional(),
     estado: z.enum(['borrador', 'finalizada']).optional(),
   })
   .refine((v) => Object.keys(v).length > 0, 'Nada que actualizar');

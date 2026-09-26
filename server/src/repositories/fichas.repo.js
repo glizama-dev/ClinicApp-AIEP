@@ -24,10 +24,10 @@ async function crear(input) {
     const [result] = await conn.execute(
       `INSERT INTO fichas
          (especialidad, paciente_id, paciente_rut, paciente_nombre,
-          profesional_id, fecha_atencion, estado, datos, firmas)
+          profesional_id, fecha_atencion, estado, datos, firmas, fotos)
        VALUES
          (:especialidad, :pacienteId, :pacienteRut, :pacienteNombre,
-          :profesionalId, :fechaAtencion, :estado, :datos, :firmas)`,
+          :profesionalId, :fechaAtencion, :estado, :datos, :firmas, :fotos)`,
       {
         especialidad: input.especialidad,
         pacienteId,
@@ -38,6 +38,7 @@ async function crear(input) {
         estado: input.estado,
         datos: JSON.stringify(input.datos),
         firmas: input.firmas ? JSON.stringify(input.firmas) : null,
+        fotos: input.fotos ? JSON.stringify(input.fotos) : null,
       }
     );
 
@@ -47,7 +48,7 @@ async function crear(input) {
 
 async function buscarPorId(id) {
   const rows = await query(
-    `SELECT ${LIST_FIELDS}, paciente_id, datos, firmas FROM fichas WHERE id = :id`,
+    `SELECT ${LIST_FIELDS}, paciente_id, datos, firmas, fotos FROM fichas WHERE id = :id`,
     { id }
   );
   return rows[0] || null;
@@ -118,6 +119,10 @@ async function actualizar(id, patch) {
   if (patch.firmas !== undefined) {
     sets.push('firmas = :firmas');
     params.firmas = patch.firmas ? JSON.stringify(patch.firmas) : null;
+  }
+  if (patch.fotos !== undefined) {
+    sets.push('fotos = :fotos');
+    params.fotos = patch.fotos ? JSON.stringify(patch.fotos) : null;
   }
   if (patch.estado !== undefined) {
     sets.push('estado = :estado');

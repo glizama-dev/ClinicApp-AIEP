@@ -49,6 +49,44 @@
     return Object.keys(firmas).length ? firmas : null;
   }
 
+  /**
+   * Redimensiona y comprime una imagen en el navegador antes de guardarla.
+   * @param {File} file
+   * @param {number} maxDim  lado mas largo en px
+   * @param {number} calidad 0-1 (calidad JPEG)
+   * @returns {Promise<string>} dataURL JPEG comprimido
+   */
+  function comprimirImagen(file, maxDim, calidad) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('No se pudo procesar la imagen.'));
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width >= height) {
+              height = Math.round(height * (maxDim / width));
+              width = maxDim;
+            } else {
+              width = Math.round(width * (maxDim / height));
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', calidad));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   /** Devuelve la fecha de hoy en formato YYYY-MM-DD (hora local). */
   function hoyISO() {
     const d = new Date();
@@ -87,5 +125,5 @@
     return dv === calcularDigitoVerificador(cuerpo);
   }
 
-  window.ClinicAppFicha = { formToObject, leerFirmas, hoyISO, esRutValido };
+  window.ClinicAppFicha = { formToObject, leerFirmas, hoyISO, esRutValido, comprimirImagen };
 })();

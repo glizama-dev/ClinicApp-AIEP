@@ -20,7 +20,12 @@ function parseJson(value) {
 }
 
 function serializarFicha(row) {
-  return { ...row, datos: parseJson(row.datos), firmas: parseJson(row.firmas) };
+  return {
+    ...row,
+    datos: parseJson(row.datos),
+    firmas: parseJson(row.firmas),
+    fotos: parseJson(row.fotos),
+  };
 }
 
 function puedeUsarEspecialidad(user, especialidad) {
@@ -54,6 +59,7 @@ async function crear(req, res) {
     },
     datos: data.datos,
     firmas: data.firmas ?? null,
+    fotos: data.fotos ?? null,
   });
 
   res.status(201).json({ id, message: 'Ficha registrada correctamente.' });

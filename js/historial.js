@@ -156,17 +156,67 @@
     if (e.target === overlay) cerrarDetalle();
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay.classList.contains('is-open')) cerrarDetalle();
+    if (e.key === 'Escape' && overlay.classList.contains('is-open') && !lightboxOverlay.classList.contains('is-open')) cerrarDetalle();
   });
 
-  function renderDetalle(ficha) {
-    const entradas = Object.entries(ficha.datos || {}).filter(
-      ([, value]) => value !== '' && value != null && !(Array.isArray(value) && value.length === 0)
-    );
-    const filas = entradas
-      .map(([key, value]) => `<tr><th>${escapeHtml(humanizeKey(key))}</th><td>${escapeHtml(Array.isArray(value) ? value.join(', ') : value)}</td></tr>`)
-      .join('');
+  function tieneValor(value) {
+    return value !== '' && value != null && !(Array.isArray(value) && value.length === 0);
+  }
 
+  function filaHtml(label, key, value) {
+    const fieldMaps = window.ClinicAppFichaFields;
+    const texto = Array.isArray(value) ? value.join(', ') : (fieldMaps ? fieldMaps.valueLabel(key, value) : value);
+    return `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(texto)}</td></tr>`;
+  }
+
+  function renderSecciones(ficha) {
+    const datos = ficha.datos || {};
+    const fieldMaps = window.ClinicAppFichaFields;
+    const secciones = fieldMaps ? fieldMaps[ficha.especialidad] : null;
+    const usados = new Set();
+    let html = '';
+
+    if (secciones) {
+      secciones.forEach((seccion) => {
+        const filas = Object.keys(seccion.fields)
+          .filter((key) => key in datos && tieneValor(datos[key]))
+          .map((key) => {
+            usados.add(key);
+            return filaHtml(seccion.fields[key], key, datos[key]);
+          })
+          .join('');
+        if (filas) {
+          html += `
+            <div class="detalle-section">
+              <h4 class="detalle-subtitulo">${escapeHtml(seccion.title)}</h4>
+              <div class="table-wrap">
+                <table class="plain-table detalle-table"><tbody>${filas}</tbody></table>
+              </div>
+            </div>
+          `;
+        }
+      });
+    }
+
+    const restantes = Object.entries(datos).filter(
+      ([key, value]) => !usados.has(key) && tieneValor(value)
+    );
+    if (restantes.length) {
+      const filas = restantes.map(([key, value]) => filaHtml(humanizeKey(key), key, value)).join('');
+      html += `
+        <div class="detalle-section">
+          <h4 class="detalle-subtitulo">Otros datos</h4>
+          <div class="table-wrap">
+            <table class="plain-table detalle-table"><tbody>${filas}</tbody></table>
+          </div>
+        </div>
+      `;
+    }
+
+    return html || '<p class="historial-empty">Sin datos registrados en esta ficha.</p>';
+  }
+
+  function renderDetalle(ficha) {
     const firmas = ficha.firmas ? Object.entries(ficha.firmas) : [];
     const firmasHtml = firmas.length
       ? `<h4 class="detalle-subtitulo">Firmas</h4><div class="signature-grid">${firmas
@@ -183,6 +233,20 @@
           .join('')}</div>`
       : '';
 
+    const fotos = Array.isArray(ficha.fotos) ? ficha.fotos : [];
+    const fotosHtml = fotos.length
+      ? `<h4 class="detalle-subtitulo">Registro fotográfico</h4><div class="foto-grid foto-grid--view">${fotos
+          .map(
+            (f, i) => `
+              <div class="foto-card">
+                <img src="${f.dataUrl}" alt="Foto de seguimiento ${i + 1}" class="foto-card__img">
+                ${f.descripcion ? `<p class="foto-card__desc-view">${escapeHtml(f.descripcion)}</p>` : ''}
+              </div>
+            `
+          )
+          .join('')}</div>`
+      : '';
+
     detalleContent.innerHTML = `
       <div class="detalle-meta">
         <p><strong>Paciente:</strong> ${escapeHtml(ficha.paciente_nombre)} (${escapeHtml(ficha.paciente_rut)})</p>
@@ -190,12 +254,9 @@
         <p><strong>Fecha de atención:</strong> ${formatFecha(ficha.fecha_atencion)}</p>
         <p><strong>Estado:</strong> ${ESTADO_LABEL[ficha.estado] || ficha.estado}</p>
       </div>
-      <div class="table-wrap">
-        <table class="plain-table detalle-table">
-          <tbody>${filas || '<tr><td>Sin datos registrados en esta ficha.</td></tr>'}</tbody>
-        </table>
-      </div>
+      ${renderSecciones(ficha)}
       ${firmasHtml}
+      ${fotosHtml}
     `;
   }
 
@@ -218,6 +279,35 @@
     } finally {
       btn.disabled = false;
     }
+  });
+
+  /* ===== Lightbox de fotos ===== */
+  const lightboxOverlay = document.getElementById('lightboxOverlay');
+  const lightboxImg = document.getElementById('lightboxImg');
+
+  function abrirLightbox(src, alt) {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || 'Foto de seguimiento ampliada';
+    lightboxOverlay.classList.add('is-open');
+  }
+
+  function cerrarLightbox() {
+    lightboxOverlay.classList.remove('is-open');
+    lightboxImg.src = '';
+  }
+
+  detalleContent.addEventListener('click', (e) => {
+    const img = e.target.closest('.foto-grid--view .foto-card__img');
+    if (!img) return;
+    abrirLightbox(img.src, img.alt);
+  });
+
+  document.getElementById('closeLightboxBtn').addEventListener('click', cerrarLightbox);
+  lightboxOverlay.addEventListener('click', (e) => {
+    if (e.target === lightboxOverlay) cerrarLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightboxOverlay.classList.contains('is-open')) cerrarLightbox();
   });
 
   mostrarPrompt();

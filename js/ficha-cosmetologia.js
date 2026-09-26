@@ -94,6 +94,54 @@
     });
   });
 
+  /* ===== Registro fotográfico ===== */
+  const FOTO_MAX = 6;
+  const fotoInput = document.getElementById('fotoInput');
+  const fotoGrid = document.getElementById('fotoGrid');
+  let fotos = [];
+
+  function renderFotos() {
+    fotoGrid.innerHTML = fotos.map((f, i) => `
+      <div class="foto-card" data-index="${i}">
+        <img src="${f.dataUrl}" class="foto-card__img" alt="Foto de seguimiento ${i + 1}">
+        <input type="text" class="foto-card__desc" placeholder="Descripción (opcional)" value="${(f.descripcion || '').replace(/"/g, '&quot;')}">
+        <button type="button" class="foto-card__remove" aria-label="Eliminar foto">&times;</button>
+      </div>
+    `).join('');
+  }
+
+  if (fotoInput) {
+    fotoInput.addEventListener('change', async () => {
+      const archivos = Array.from(fotoInput.files || []);
+      for (const archivo of archivos) {
+        if (fotos.length >= FOTO_MAX) break;
+        try {
+          const dataUrl = await ficha.comprimirImagen(archivo, 1280, 0.7);
+          fotos.push({ dataUrl, descripcion: '' });
+        } catch (err) {
+          // Se ignora un archivo que no se pudo procesar como imagen.
+        }
+      }
+      renderFotos();
+      fotoInput.value = '';
+    });
+
+    fotoGrid.addEventListener('click', (e) => {
+      const btn = e.target.closest('.foto-card__remove');
+      if (!btn) return;
+      const idx = Number(btn.closest('.foto-card').dataset.index);
+      fotos.splice(idx, 1);
+      renderFotos();
+    });
+
+    fotoGrid.addEventListener('input', (e) => {
+      const input = e.target.closest('.foto-card__desc');
+      if (!input) return;
+      const idx = Number(input.closest('.foto-card').dataset.index);
+      if (fotos[idx]) fotos[idx].descripcion = input.value;
+    });
+  }
+
   /* ===== Imprimir ===== */
   ['printFichaBtn', 'printFichaBtnBottom'].forEach((id) => {
     const btn = document.getElementById(id);
@@ -179,6 +227,7 @@
       },
       datos: datos,
       firmas: firmas,
+      fotos: fotos.length ? fotos : null,
     };
 
     const submitBtn = form.querySelector('button[type="submit"]');
@@ -196,6 +245,8 @@
       form.querySelectorAll('.signature-pad').forEach((c) => {
         c.getContext('2d').clearRect(0, 0, c.width, c.height);
       });
+      fotos = [];
+      renderFotos();
     } catch (err) {
       if (err && err.status === 401) {
         window.location.href = 'index.html?login=1';
