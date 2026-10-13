@@ -422,7 +422,14 @@ body { background: var(--color-bg-soft); }
 }
 
 @media (max-width: 720px) {
+  /* En movil el header deja de ser sticky: con los botones en una segunda
+     fila su altura varia, asi que solo la barra de secciones queda fija. */
+  .ficha-header { position: static; }
+  .ficha-header__inner { flex-wrap: wrap; gap: 10px; padding: 12px 24px; }
   .ficha-header__title { display: none; }
+  .ficha-header__actions { width: 100%; flex-wrap: wrap; gap: 6px; }
+  .ficha-header__actions .btn { flex: 1 1 auto; padding: 8px 12px; font-size: 0.85rem; }
+  .ficha-sidebar { top: 0; }
   .ficha-section { padding: 22px; }
   .yn-row, .habits-row { grid-template-columns: 1fr; }
   .habits-row__fields { grid-template-columns: repeat(2, 1fr); }
