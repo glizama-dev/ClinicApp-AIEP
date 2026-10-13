@@ -10,22 +10,27 @@ const email = z
   .toLowerCase()
   .email('Correo invalido');
 
-const emailInstitucional = email.refine(
-  (v) => v.endsWith(config.auth.allowedEmailDomain),
-  `Debes usar tu correo institucional (${config.auth.allowedEmailDomain})`
-);
-
 const fecha = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'Fecha invalida (formato YYYY-MM-DD)');
 
-const registerSchema = z.object({
-  nombre: z.string().trim().min(2, 'Nombre demasiado corto').max(150),
-  rol: z.enum(['estudiante', 'profesional']),
-  especialidad: z.enum(['podologia', 'cosmetologia', 'ambas']),
-  email: emailInstitucional,
-  password: z.string().min(8, 'La contrasena debe tener al menos 8 caracteres').max(200),
-});
+// Los estudiantes deben usar el correo institucional; los profesionales
+// pueden registrarse con cualquier correo valido.
+const registerSchema = z
+  .object({
+    nombre: z.string().trim().min(2, 'Nombre demasiado corto').max(150),
+    rol: z.enum(['estudiante', 'profesional']),
+    especialidad: z.enum(['podologia', 'cosmetologia', 'ambas']),
+    email,
+    password: z.string().min(8, 'La contrasena debe tener al menos 8 caracteres').max(200),
+  })
+  .refine(
+    (v) => v.rol !== 'estudiante' || v.email.endsWith(config.auth.allowedEmailDomain),
+    {
+      message: `Los estudiantes deben usar su correo institucional (${config.auth.allowedEmailDomain})`,
+      path: ['email'],
+    }
+  );
 
 const loginSchema = z.object({
   email,

@@ -236,7 +236,7 @@
 
     const email = document.getElementById('forgotEmail').value.trim();
     if (!email) {
-      showError(forgotError, 'Ingresa tu correo institucional.');
+      showError(forgotError, 'Ingresa tu correo electrónico.');
       return;
     }
 
@@ -258,6 +258,27 @@
 
   /* ===== Register form ===== */
   const registerError = document.getElementById('registerError');
+  const registerRole = document.getElementById('registerRole');
+  const registerEmailLabel = document.getElementById('registerEmailLabel');
+  const registerEmailInput = document.getElementById('registerEmail');
+  const registerEmailHint = document.getElementById('registerEmailHint');
+
+  // Ajusta los textos del correo segun el perfil: estudiantes usan el
+  // correo institucional, profesionales cualquier correo.
+  function updateRegisterEmailHint() {
+    if (registerRole.value === 'profesional') {
+      registerEmailLabel.textContent = 'Correo electrónico';
+      registerEmailInput.placeholder = 'tucorreo@ejemplo.com';
+      registerEmailHint.textContent = 'Puedes registrarte con cualquier correo';
+    } else {
+      registerEmailLabel.textContent = 'Correo institucional';
+      registerEmailInput.placeholder = `tucorreo${INSTITUTIONAL_EMAIL_DOMAIN}`;
+      registerEmailHint.textContent = `Los estudiantes deben registrarse con su correo ${INSTITUTIONAL_EMAIL_DOMAIN}`;
+    }
+  }
+
+  registerRole.addEventListener('change', updateRegisterEmailHint);
+  registerForm.addEventListener('reset', () => setTimeout(updateRegisterEmailHint, 0));
 
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -271,8 +292,8 @@
       password: document.getElementById('registerPassword').value,
     };
 
-    if (!payload.email.endsWith(INSTITUTIONAL_EMAIL_DOMAIN)) {
-      showError(registerError, `Debes registrarte con tu correo institucional ${INSTITUTIONAL_EMAIL_DOMAIN}`);
+    if (payload.rol === 'estudiante' && !payload.email.endsWith(INSTITUTIONAL_EMAIL_DOMAIN)) {
+      showError(registerError, `Los estudiantes deben registrarse con su correo institucional ${INSTITUTIONAL_EMAIL_DOMAIN}`);
       return;
     }
 

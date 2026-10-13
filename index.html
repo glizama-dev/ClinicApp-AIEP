@@ -266,10 +266,10 @@
       <!-- Login form -->
       <form class="auth-form" id="loginForm">
         <h3 id="loginTitle">Bienvenido de nuevo</h3>
-        <p class="auth-form__subtitle">Ingresa con tu correo institucional de Instituto Profesional AIEP</p>
+        <p class="auth-form__subtitle">Ingresa con el correo con el que te registraste</p>
 
         <div class="form-group">
-          <label for="loginEmail">Correo institucional</label>
+          <label for="loginEmail">Correo electrónico</label>
           <input type="email" id="loginEmail" name="email" placeholder="tucorreo@correoaiep.cl" required autocomplete="username">
         </div>
 
@@ -326,9 +326,9 @@
         </fieldset>
 
         <div class="form-group">
-          <label for="registerEmail">Correo institucional</label>
+          <label for="registerEmail" id="registerEmailLabel">Correo institucional</label>
           <input type="email" id="registerEmail" name="email" placeholder="tucorreo@correoaiep.cl" required autocomplete="username">
-          <span class="form-hint">Debes registrarte con tu correo @correoaiep.cl</span>
+          <span class="form-hint" id="registerEmailHint">Los estudiantes deben registrarse con su correo @correoaiep.cl</span>
         </div>
 
         <div class="form-group">
@@ -340,16 +340,16 @@
         </div>
 
         <button type="submit" class="btn btn--primary btn--block">Crear cuenta</button>
-        <p class="auth-form__error" id="registerError" hidden>Debes registrarte con tu correo institucional @correoaiep.cl</p>
+        <p class="auth-form__error" id="registerError" hidden></p>
       </form>
 
       <!-- Forgot password form -->
       <form class="auth-form" id="forgotForm" hidden>
         <h3>Recuperar contraseña</h3>
-        <p class="auth-form__subtitle">Ingresa tu correo institucional y te enviaremos un enlace para crear una nueva contraseña.</p>
+        <p class="auth-form__subtitle">Ingresa tu correo registrado y te enviaremos un enlace para crear una nueva contraseña.</p>
 
         <div class="form-group">
-          <label for="forgotEmail">Correo institucional</label>
+          <label for="forgotEmail">Correo electrónico</label>
           <input type="email" id="forgotEmail" name="email" placeholder="tucorreo@correoaiep.cl" required autocomplete="username">
         </div>
 
