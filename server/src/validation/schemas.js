@@ -20,7 +20,7 @@ const registerSchema = z
   .object({
     nombre: z.string().trim().min(2, 'Nombre demasiado corto').max(150),
     rol: z.enum(['estudiante', 'profesional']),
-    especialidad: z.enum(['podologia', 'cosmetologia', 'ambas']),
+    especialidad: z.enum(['podologia', 'cosmetologia']),
     email,
     password: z.string().min(8, 'La contrasena debe tener al menos 8 caracteres').max(200),
   })
