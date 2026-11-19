@@ -36,6 +36,15 @@ const USUARIOS = [
 ];
 
 async function run() {
+  // En produccion no se permiten contrasenas por defecto conocidas.
+  if (process.env.NODE_ENV === 'production') {
+    const faltantes = ['SEED_ADMIN_PASSWORD', 'SEED_PODO_PASSWORD', 'SEED_COSME_PASSWORD']
+      .filter((name) => !process.env[name]);
+    if (faltantes.length) {
+      throw new Error(`En produccion debes definir: ${faltantes.join(', ')} (no se usan contrasenas por defecto)`);
+    }
+  }
+
   for (const u of USUARIOS) {
     const passwordHash = await bcrypt.hash(u.password, 12);
     await query(

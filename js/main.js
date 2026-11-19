@@ -292,6 +292,11 @@
       password: document.getElementById('registerPassword').value,
     };
 
+    if (payload.password.length < 8 || !/[A-Za-zÁÉÍÓÚÑáéíóúñ]/.test(payload.password) || !/\d/.test(payload.password)) {
+      showError(registerError, 'La contraseña debe tener al menos 8 caracteres e incluir letras y números.');
+      return;
+    }
+
     if (payload.rol === 'estudiante' && !payload.email.endsWith(INSTITUTIONAL_EMAIL_DOMAIN)) {
       showError(registerError, `Los estudiantes deben registrarse con su correo institucional ${INSTITUTIONAL_EMAIL_DOMAIN}`);
       return;

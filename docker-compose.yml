@@ -10,7 +10,7 @@ services:
       MYSQL_USER: ${DB_USER:-clinicapp}
       MYSQL_PASSWORD: ${DB_PASSWORD:-clinicapp}
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"   # solo accesible desde este equipo
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
@@ -23,7 +23,7 @@ services:
     image: adminer:latest
     restart: unless-stopped
     ports:
-      - "8080:8080"   # interfaz web para ver/editar la base de datos
+      - "127.0.0.1:8080:8080"   # interfaz web para ver/editar la BD (solo local)
     environment:
       ADMINER_DEFAULT_SERVER: db
     depends_on:

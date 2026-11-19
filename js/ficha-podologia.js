@@ -100,11 +100,16 @@
   const fotoGrid = document.getElementById('fotoGrid');
   let fotos = [];
 
+  const SAFE_IMAGE_DATA_URL = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/;
+  const escapeAttr = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+
   function renderFotos() {
     fotoGrid.innerHTML = fotos.map((f, i) => `
       <div class="foto-card" data-index="${i}">
-        <img src="${f.dataUrl}" class="foto-card__img" alt="Foto de seguimiento ${i + 1}">
-        <input type="text" class="foto-card__desc" placeholder="Descripción (opcional)" value="${(f.descripcion || '').replace(/"/g, '&quot;')}">
+        <img src="${SAFE_IMAGE_DATA_URL.test(f.dataUrl) ? escapeAttr(f.dataUrl) : ''}" class="foto-card__img" alt="Foto de seguimiento ${i + 1}">
+        <input type="text" class="foto-card__desc" placeholder="Descripción (opcional)" value="${escapeAttr(f.descripcion)}">
         <button type="button" class="foto-card__remove" aria-label="Eliminar foto">&times;</button>
       </div>
     `).join('');

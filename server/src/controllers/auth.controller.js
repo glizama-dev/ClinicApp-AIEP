@@ -15,7 +15,9 @@ const BCRYPT_COST = 12;
 const RESET_TOKEN_TTL_MIN = 30;
 
 // Hash valido de descarte: iguala el tiempo de respuesta cuando el correo no existe.
-const DUMMY_HASH = bcrypt.hashSync('dummy-password-no-usado', 10);
+// Debe usar el MISMO costo que los hashes reales; si no, la diferencia de
+// tiempo revela que correos estan registrados.
+const DUMMY_HASH = bcrypt.hashSync('dummy-password-no-usado', BCRYPT_COST);
 
 function sinHash(usuario) {
   if (!usuario) return usuario;
@@ -71,19 +73,29 @@ async function me(req, res) {
 const MENSAJE_GENERICO_FORGOT =
   'Si el correo esta registrado, te enviamos instrucciones para recuperar tu contrasena.';
 
+async function generarYEnviarReset(usuario) {
+  const token = crypto.randomBytes(32).toString('hex');
+  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+  const expiraAt = new Date(Date.now() + RESET_TOKEN_TTL_MIN * 60 * 1000);
+
+  await passwordResetsRepo.crear({ usuarioId: usuario.id, tokenHash, expiraAt });
+
+  // El token va en el fragmento (#): el navegador no lo envia al servidor,
+  // asi no queda registrado en logs de acceso ni de proxies.
+  const link = `${config.appBaseUrl}/reset-password.html#token=${token}`;
+  await enviarCorreoRecuperacion(usuario.email, link);
+}
+
 async function forgotPassword(req, res) {
   const { email } = forgotPasswordSchema.parse(req.body);
   const usuario = await usuariosRepo.buscarPorEmail(email);
 
+  // Se responde sin esperar el envio del correo: si se esperara, el tiempo de
+  // respuesta revelaria si el correo esta registrado.
   if (usuario) {
-    const token = crypto.randomBytes(32).toString('hex');
-    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-    const expiraAt = new Date(Date.now() + RESET_TOKEN_TTL_MIN * 60 * 1000);
-
-    await passwordResetsRepo.crear({ usuarioId: usuario.id, tokenHash, expiraAt });
-
-    const link = `${config.appBaseUrl}/reset-password.html?token=${token}`;
-    await enviarCorreoRecuperacion(usuario.email, link);
+    generarYEnviarReset(usuario).catch((err) => {
+      console.error('[forgot-password] no se pudo enviar el correo de recuperacion:', err.message);
+    });
   }
 
   res.json({ message: MENSAJE_GENERICO_FORGOT });
@@ -92,17 +104,21 @@ async function forgotPassword(req, res) {
 async function resetPassword(req, res) {
   const { token, password } = resetPasswordSchema.parse(req.body);
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+  const enlaceInvalido = () =>
+    ApiError.badRequest('Este enlace no es valido o ya vencio. Solicita uno nuevo.');
 
   const reset = await passwordResetsRepo.buscarVigentePorHash(tokenHash);
-  if (!reset) {
-    throw ApiError.badRequest('Este enlace no es valido o ya vencio. Solicita uno nuevo.');
-  }
+  if (!reset) throw enlaceInvalido();
 
   const passwordHash = await bcrypt.hash(password, BCRYPT_COST);
-  await usuariosRepo.actualizarPassword(reset.usuario_id, passwordHash);
-  await passwordResetsRepo.marcarConsumido(reset.id);
+  const ok = await usuariosRepo.resetearPassword({
+    resetId: reset.id,
+    usuarioId: reset.usuario_id,
+    passwordHash,
+  });
+  if (!ok) throw enlaceInvalido();
 
-  res.json({ message: 'Contrasena actualizada correctamente.' });
+  res.json({ message: 'Contrasena actualizada correctamente. Inicia sesion con tu nueva contrasena.' });
 }
 
 module.exports = { register, login, me, forgotPassword, resetPassword };

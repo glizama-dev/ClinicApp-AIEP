@@ -335,6 +335,7 @@ img { max-width: 100%; display: block; }
 
 /* ============ Section head ============ */
 .section-head { text-align: center; max-width: 620px; margin: 0 auto 48px; }
+.section-head--left { text-align: left; margin-bottom: 24px; }
 .eyebrow {
   display: inline-block;
   color: var(--color-primary-dark);

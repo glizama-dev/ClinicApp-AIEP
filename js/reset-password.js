@@ -24,7 +24,14 @@
     errorMsg.hidden = false;
   }
 
-  const token = new URLSearchParams(window.location.search).get('token');
+  // El token llega en el fragmento (#token=...), que el navegador no envia al
+  // servidor. Se acepta tambien ?token= por compatibilidad con enlaces antiguos.
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const token = hashParams.get('token') || new URLSearchParams(window.location.search).get('token');
+  if (token) {
+    // Saca el token de la barra de direcciones y del historial.
+    window.history.replaceState(null, '', window.location.pathname);
+  }
   if (!token) {
     mostrarError('Este enlace no es válido. Solicita uno nuevo desde la página de inicio.');
     form.querySelectorAll('input, button').forEach((el) => { el.disabled = true; });
@@ -39,8 +46,8 @@
     const password = passwordInput.value;
     const confirm = confirmInput.value;
 
-    if (password.length < 8) {
-      mostrarError('La contraseña debe tener al menos 8 caracteres.');
+    if (password.length < 8 || !/[A-Za-zÁÉÍÓÚÑáéíóúñ]/.test(password) || !/\d/.test(password)) {
+      mostrarError('La contraseña debe tener al menos 8 caracteres e incluir letras y números.');
       return;
     }
     if (password !== confirm) {

@@ -3,9 +3,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Dependencias (capa cacheable)
-COPY server/package.json ./
-RUN npm install --omit=dev
+# Dependencias (capa cacheable). Se usa el lockfile para instalar exactamente
+# las versiones auditadas.
+COPY server/package.json server/package-lock.json ./
+RUN npm ci --omit=dev
 
 # Codigo del backend
 COPY server/ ./
@@ -22,5 +23,8 @@ ENV NODE_ENV=production
 ENV STATIC_DIR=/app/public
 
 EXPOSE 3000
+
+# No ejecutar como root dentro del contenedor.
+USER node
 
 CMD ["sh", "-c", "npm run migrate && npm start"]

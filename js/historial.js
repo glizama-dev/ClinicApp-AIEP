@@ -41,6 +41,13 @@
     ));
   }
 
+  // Solo se renderizan imagenes raster en dataURL base64; cualquier otro valor
+  // (texto con comillas, javascript:, SVG, etc.) se descarta para evitar XSS.
+  const SAFE_IMAGE_DATA_URL = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/;
+  function safeImageSrc(value) {
+    return typeof value === 'string' && SAFE_IMAGE_DATA_URL.test(value) ? value : '';
+  }
+
   function formatFecha(iso) {
     if (!iso) return '—';
     const [y, m, d] = String(iso).slice(0, 10).split('-');
@@ -68,12 +75,12 @@
   function renderRows(items) {
     tbody.innerHTML = items.map((f) => `
       <tr>
-        <td>${formatFecha(f.fecha_atencion)}</td>
+        <td>${escapeHtml(formatFecha(f.fecha_atencion))}</td>
         <td>${escapeHtml(f.paciente_nombre)}</td>
         <td>${escapeHtml(f.paciente_rut)}</td>
-        <td>${ESPECIALIDAD_LABEL[f.especialidad] || f.especialidad}</td>
-        <td>${ESTADO_LABEL[f.estado] || f.estado}</td>
-        <td><button type="button" class="btn btn--ghost btn--sm" data-ver="${f.id}">Ver</button></td>
+        <td>${escapeHtml(ESPECIALIDAD_LABEL[f.especialidad] || f.especialidad)}</td>
+        <td>${escapeHtml(ESTADO_LABEL[f.estado] || f.estado)}</td>
+        <td><button type="button" class="btn btn--ghost btn--sm" data-ver="${Number(f.id)}">Ver</button></td>
       </tr>
     `).join('');
   }
@@ -217,7 +224,9 @@
   }
 
   function renderDetalle(ficha) {
-    const firmas = ficha.firmas ? Object.entries(ficha.firmas) : [];
+    const firmas = ficha.firmas
+      ? Object.entries(ficha.firmas).filter(([, dataUrl]) => safeImageSrc(dataUrl))
+      : [];
     const firmasHtml = firmas.length
       ? `<h4 class="detalle-subtitulo">Firmas</h4><div class="signature-grid">${firmas
           .map(
@@ -225,7 +234,7 @@
               <div class="signature-card">
                 <span class="signature-card__label">Firma ${escapeHtml(humanizeKey(nombre))}</span>
                 <div class="signature-card__canvas-wrap">
-                  <img src="${dataUrl}" alt="Firma ${escapeHtml(humanizeKey(nombre))}" class="detalle-firma-img">
+                  <img src="${escapeHtml(safeImageSrc(dataUrl))}" alt="Firma ${escapeHtml(humanizeKey(nombre))}" class="detalle-firma-img">
                 </div>
               </div>
             `
@@ -233,13 +242,15 @@
           .join('')}</div>`
       : '';
 
-    const fotos = Array.isArray(ficha.fotos) ? ficha.fotos : [];
+    const fotos = Array.isArray(ficha.fotos)
+      ? ficha.fotos.filter((f) => f && safeImageSrc(f.dataUrl))
+      : [];
     const fotosHtml = fotos.length
       ? `<h4 class="detalle-subtitulo">Registro fotográfico</h4><div class="foto-grid foto-grid--view">${fotos
           .map(
             (f, i) => `
               <div class="foto-card">
-                <img src="${f.dataUrl}" alt="Foto de seguimiento ${i + 1}" class="foto-card__img">
+                <img src="${escapeHtml(safeImageSrc(f.dataUrl))}" alt="Foto de seguimiento ${i + 1}" class="foto-card__img">
                 ${f.descripcion ? `<p class="foto-card__desc-view">${escapeHtml(f.descripcion)}</p>` : ''}
               </div>
             `
@@ -250,9 +261,9 @@
     detalleContent.innerHTML = `
       <div class="detalle-meta">
         <p><strong>Paciente:</strong> ${escapeHtml(ficha.paciente_nombre)} (${escapeHtml(ficha.paciente_rut)})</p>
-        <p><strong>Especialidad:</strong> ${ESPECIALIDAD_LABEL[ficha.especialidad] || ficha.especialidad}</p>
-        <p><strong>Fecha de atención:</strong> ${formatFecha(ficha.fecha_atencion)}</p>
-        <p><strong>Estado:</strong> ${ESTADO_LABEL[ficha.estado] || ficha.estado}</p>
+        <p><strong>Especialidad:</strong> ${escapeHtml(ESPECIALIDAD_LABEL[ficha.especialidad] || ficha.especialidad)}</p>
+        <p><strong>Fecha de atención:</strong> ${escapeHtml(formatFecha(ficha.fecha_atencion))}</p>
+        <p><strong>Estado:</strong> ${escapeHtml(ESTADO_LABEL[ficha.estado] || ficha.estado)}</p>
       </div>
       ${renderSecciones(ficha)}
       ${firmasHtml}
