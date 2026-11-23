@@ -2,11 +2,14 @@
 
 const { query } = require('../db');
 
-async function crear({ usuarioId, tokenHash, expiraAt }) {
+// El vencimiento se calcula con el reloj de MySQL (NOW()), el mismo que se usa
+// al validarlo. Calcularlo en Node fallaba si el servidor de la app y MySQL
+// tienen zonas horarias distintas (ej. app en hora de Chile y MySQL en UTC).
+async function crear({ usuarioId, tokenHash, ttlMinutos }) {
   await query(
     `INSERT INTO password_resets (usuario_id, token_hash, expira_at)
-     VALUES (:usuarioId, :tokenHash, :expiraAt)`,
-    { usuarioId, tokenHash, expiraAt }
+     VALUES (:usuarioId, :tokenHash, NOW() + INTERVAL :ttlMinutos MINUTE)`,
+    { usuarioId, tokenHash, ttlMinutos }
   );
 }
 

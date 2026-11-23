@@ -76,9 +76,7 @@ const MENSAJE_GENERICO_FORGOT =
 async function generarYEnviarReset(usuario) {
   const token = crypto.randomBytes(32).toString('hex');
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-  const expiraAt = new Date(Date.now() + RESET_TOKEN_TTL_MIN * 60 * 1000);
-
-  await passwordResetsRepo.crear({ usuarioId: usuario.id, tokenHash, expiraAt });
+  await passwordResetsRepo.crear({ usuarioId: usuario.id, tokenHash, ttlMinutos: RESET_TOKEN_TTL_MIN });
 
   // El token va en el fragmento (#): el navegador no lo envia al servidor,
   // asi no queda registrado en logs de acceso ni de proxies.

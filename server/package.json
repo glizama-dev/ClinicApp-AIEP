@@ -8,7 +8,9 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "migrate": "node db/migrate.js",
-    "seed": "node db/seed.js"
+    "seed": "node db/seed.js",
+    "pretest": "node test/setup-db.js",
+    "test": "node --test --test-concurrency=1 --test-reporter=spec \"test/**/*.test.js\""
   },
   "engines": {
     "node": ">=20"

@@ -117,3 +117,26 @@ Resumen de las medidas implementadas:
 - Correr el backend fuera de Docker: define `DB_HOST=localhost` en `.env` y luego
   `cd server && npm install && npm run migrate && npm run dev`.
 - Auditoría de dependencias: `cd server && npm audit --omit=dev`.
+
+## Pruebas automáticas
+
+70 pruebas del backend con el runner nativo de Node (`node:test`), sin
+dependencias adicionales. Cubren registro, inicio de sesión y sesiones,
+recuperación de contraseña, fichas clínicas (incluidos los permisos entre
+usuarios y el rechazo de imágenes maliciosas), formulario de contacto,
+cabeceras de seguridad, límites de intentos y validación de RUT.
+
+```bash
+docker compose up -d db      # el MySQL de Docker debe estar corriendo
+cd server
+npm install                  # solo la primera vez
+npm test
+```
+
+- Usan una base de datos aparte, `clinicapp_test`, que se borra y se vuelve a
+  crear en cada ejecución. **No tocan la base de datos de desarrollo.**
+- **No envían correos reales:** usan una clave de Brevo falsa e interceptan
+  toda llamada a Brevo y a cualquier red externa.
+- Necesitan `MYSQL_ROOT_PASSWORD` en el `.env` para crear la base de pruebas.
+- Los archivos están en `server/test/` (`*.test.js`); `helpers.js` reúne las
+  utilidades comunes (servidor de prueba, usuarios, correos interceptados).
