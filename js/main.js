@@ -290,7 +290,13 @@
       especialidad: document.getElementById('registerSpecialty').value,
       email: document.getElementById('registerEmail').value.trim().toLowerCase(),
       password: document.getElementById('registerPassword').value,
+      aceptaTerminos: document.getElementById('registerTerms').checked,
     };
+
+    if (!payload.aceptaTerminos) {
+      showError(registerError, 'Debes aceptar los Términos y condiciones y la Política de privacidad.');
+      return;
+    }
 
     if (payload.password.length < 8 || !/[A-Za-zÁÉÍÓÚÑáéíóúñ]/.test(payload.password) || !/\d/.test(payload.password)) {
       showError(registerError, 'La contraseña debe tener al menos 8 caracteres e incluir letras y números.');

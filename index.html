@@ -247,8 +247,8 @@
 
       <div class="footer__col">
         <h5>Legal</h5>
-        <a href="#">Términos y condiciones</a>
-        <a href="#">Política de privacidad</a>
+        <a href="terminos.html">Términos y condiciones</a>
+        <a href="privacidad.html">Política de privacidad</a>
       </div>
     </div>
     <div class="container footer__bottom">
@@ -340,6 +340,11 @@
             <button type="button" class="password-toggle" data-target="registerPassword" aria-label="Mostrar contraseña"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
           </div>
         </div>
+
+        <label class="checkbox checkbox--terms">
+          <input type="checkbox" id="registerTerms" name="terms" required>
+          <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener">Términos y condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a></span>
+        </label>
 
         <button type="submit" class="btn btn--primary btn--block">Crear cuenta</button>
         <p class="auth-form__error" id="registerError" hidden></p>

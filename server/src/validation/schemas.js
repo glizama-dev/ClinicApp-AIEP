@@ -46,6 +46,9 @@ const registerSchema = z
     especialidad: z.enum(['podologia', 'cosmetologia']),
     email,
     password,
+    aceptaTerminos: z.literal(true, {
+      message: 'Debes aceptar los Terminos y condiciones y la Politica de privacidad',
+    }),
   })
   .refine(
     (v) => v.rol !== 'estudiante' || v.email.endsWith(config.auth.allowedEmailDomain),

@@ -14,7 +14,7 @@ COPY server/ ./
 # Frontend estatico. En docker-compose se monta ademas como volumen para
 # desarrollo con recarga.
 RUN mkdir -p /app/public
-COPY index.html ficha-podologia.html ficha-cosmetologia.html historial.html reset-password.html panel.html /app/public/
+COPY index.html ficha-podologia.html ficha-cosmetologia.html historial.html reset-password.html panel.html privacidad.html terminos.html /app/public/
 COPY css/ /app/public/css/
 COPY js/ /app/public/js/
 COPY img/ /app/public/img/

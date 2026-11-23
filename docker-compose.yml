@@ -54,6 +54,8 @@ services:
       - ./historial.html:/app/public/historial.html
       - ./reset-password.html:/app/public/reset-password.html
       - ./panel.html:/app/public/panel.html
+      - ./privacidad.html:/app/public/privacidad.html
+      - ./terminos.html:/app/public/terminos.html
       - ./css:/app/public/css
       - ./js:/app/public/js
       - ./img:/app/public/img
