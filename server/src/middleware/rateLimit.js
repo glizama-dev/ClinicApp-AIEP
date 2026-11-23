@@ -24,6 +24,13 @@ const registerLimiter = limiter({ max: 10 });
 const forgotPasswordLimiter = limiter({ max: 5 });
 const resetPasswordLimiter = limiter({ max: 10 });
 
+// Formulario de contacto publico: evita que se use para inundar el buzon.
+const contactLimiter = limiter({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: 'Enviaste varios mensajes seguidos. Intenta de nuevo en una hora.',
+});
+
 // Fuerza bruta distribuida (muchas IPs contra una cuenta): limita los intentos
 // FALLIDOS por correo. Los logins exitosos no cuentan.
 const loginPorCuentaLimiter = limiter({
@@ -48,5 +55,6 @@ module.exports = {
   registerLimiter,
   forgotPasswordLimiter,
   resetPasswordLimiter,
+  contactLimiter,
   apiLimiter,
 };

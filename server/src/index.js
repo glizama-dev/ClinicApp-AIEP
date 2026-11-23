@@ -11,6 +11,7 @@ const { notFound, errorHandler } = require('./middleware/error');
 const { apiLimiter } = require('./middleware/rateLimit');
 const authRoutes = require('./routes/auth.routes');
 const fichasRoutes = require('./routes/fichas.routes');
+const contactRoutes = require('./routes/contact.routes');
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api', apiLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/fichas', fichasRoutes);
+app.use('/api/contacto', contactRoutes);
 app.use('/api', notFound);
 
 // No exponer el codigo del backend por HTTP cuando STATIC_DIR es la raiz del repo.

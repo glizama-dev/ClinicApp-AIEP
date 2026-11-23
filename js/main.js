@@ -268,7 +268,7 @@
   function updateRegisterEmailHint() {
     if (registerRole.value === 'profesional') {
       registerEmailLabel.textContent = 'Correo electrónico';
-      registerEmailInput.placeholder = 'tucorreo@ejemplo.com';
+      registerEmailInput.placeholder = 'tucorreo@ejemplo.cl';
       registerEmailHint.textContent = 'Puedes registrarte con cualquier correo';
     } else {
       registerEmailLabel.textContent = 'Correo institucional';
@@ -315,14 +315,39 @@
     }
   });
 
-  /* ===== Contact form (UI only) ===== */
+  /* ===== Contact form ===== */
   const contactForm = document.getElementById('contactForm');
   const contactSuccess = document.getElementById('contactSuccess');
+  const contactError = document.getElementById('contactError');
+  let contactSuccessTimer = null;
 
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    contactSuccess.hidden = false;
-    contactForm.reset();
-    setTimeout(() => { contactSuccess.hidden = true; }, 5000);
+    contactError.hidden = true;
+    contactSuccess.hidden = true;
+
+    const payload = {
+      nombre: document.getElementById('contactName').value.trim(),
+      email: document.getElementById('contactEmail').value.trim(),
+      mensaje: document.getElementById('contactMessage').value.trim(),
+    };
+
+    setFormLoading(contactForm, true);
+    try {
+      await window.ClinicAppApi.apiFetch('/api/contacto', {
+        method: 'POST',
+        auth: false,
+        body: payload,
+      });
+      contactForm.reset();
+      contactSuccess.hidden = false;
+      clearTimeout(contactSuccessTimer);
+      contactSuccessTimer = setTimeout(() => { contactSuccess.hidden = true; }, 6000);
+    } catch (err) {
+      const detalle = err && Array.isArray(err.details) && err.details[0] && err.details[0].mensaje;
+      showError(contactError, detalle || (err && err.message) || 'No se pudo enviar el mensaje.');
+    } finally {
+      setFormLoading(contactForm, false);
+    }
   });
 })();

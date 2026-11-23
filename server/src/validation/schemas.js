@@ -69,6 +69,16 @@ const resetPasswordSchema = z.object({
   password,
 });
 
+const contactSchema = z.object({
+  nombre: z.string().trim().min(2, 'Ingresa tu nombre').max(150, 'Nombre demasiado largo'),
+  email: email.max(190),
+  mensaje: z
+    .string()
+    .trim()
+    .min(10, 'El mensaje debe tener al menos 10 caracteres')
+    .max(3000, 'El mensaje no puede superar los 3000 caracteres'),
+});
+
 const rut = z
   .string()
   .trim()
@@ -124,6 +134,7 @@ module.exports = {
   loginSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  contactSchema,
   fichaCreateSchema,
   fichaUpdateSchema,
   fichaListQuerySchema,
